@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # dig.pl
-my $version = 1.07;	# 1-30-04 Michael Robinton <michael@bizsystems.com>
+my $version = 1.08;	# 2-21-05 Michael Robinton <michael@bizsystems.com>
 
 #
 # Copyright 2003, Michael Robinton <michael@bizsystems.com>
@@ -59,7 +59,7 @@ server	is the name or IP address of the name server to query.  An IPv4
 	instead of the standard DNS port number 53.
 
   -t	indicates what type of query is required. This script supports
-	only A, MX, NS, CNAME, SOA, TXT, and ANY queries as well as
+	only A, AAAA, MX, NS, CNAME, SOA, TXT, and ANY queries as well as
 	AXFR record transfers. If no type argument is supplied, dig.pl
 	will perform a lookup for an A record
 
@@ -82,6 +82,7 @@ my $sname = $server;
 
 my %allowed = (
 	A	=>	T_A,
+	AAAA	=>	T_AAAA,
 	MX	=>	T_MX,
 	NS	=>	T_NS,
 	CNAME	=>	T_CNAME,

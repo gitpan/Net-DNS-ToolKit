@@ -1,6 +1,6 @@
 /* ToolKit.xs
  *
- * Copyright 2003, Michael Robinton <michael@bizsystems.com>
+ * Copyright 2003 - 2005, Michael Robinton <michael@bizsystems.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -495,7 +495,7 @@ getIPv4(buffer,off)
     PREINIT:
 	SV * netaddr;
 	STRLEN size;
-	u_char * cp, out[4];
+	u_char * cp, out[NS_INADDRSZ];
     PPCODE:
 	if (GIMME_V == G_VOID)
 	    XSRETURN_UNDEF;		/* punt, nothing to return	*/
@@ -509,7 +509,7 @@ getIPv4(buffer,off)
 	}
 	cp = (u_char *)(SvPV(SvRV(buffer),size) + off);
 
-	off += NS_INT32SZ;
+	off += NS_INADDRSZ;
 	if (off > size)			/* punt if pointing beyond end of buff	*/
 	    goto bail;
 	
@@ -548,6 +548,69 @@ putIPv4(buffer,off,netaddr)
 	memcpy(cp,netaddr,NS_INADDRSZ);
 
 	RETVAL = (int)(size + NS_INADDRSZ);
+    OUTPUT:
+	RETVAL
+
+void
+getIPv6(buffer,off)
+	SV * buffer
+	unsigned int off
+    PREINIT:
+	SV * ipv6addr;
+	STRLEN size;
+	u_char * cp, out[NS_IN6ADDRSZ];
+    PPCODE:
+	if (GIMME_V == G_VOID)
+	    XSRETURN_UNDEF;		/* punt, nothing to return	*/
+
+	if (!SvROK(buffer)) {
+	bail:
+	    if (GIMME_V != G_ARRAY)
+		XSRETURN_UNDEF;
+	    else
+		XSRETURN_EMPTY;
+	}
+	cp = (u_char *)(SvPV(SvRV(buffer),size) + off);
+
+	off += NS_IN6ADDRSZ;
+	if (off > size)			/* punt if pointing beyond end of buff	*/
+	    goto bail;
+	
+	ipv6addr = sv_newmortal();
+	sv_setpvn(ipv6addr, (char *)cp, NS_IN6ADDRSZ );
+	XPUSHs(ipv6addr);
+	if (GIMME_V == G_ARRAY) {
+	    XPUSHs(sv_2mortal(newSViv( off)));
+	    XSRETURN(2);
+	}
+	    XSRETURN(1);
+
+unsigned int
+putIPv6(buffer,off,ipv6addr)
+	SV * buffer
+	unsigned int off
+	unsigned char * ipv6addr
+    PREINIT:
+	STRLEN size, discard;
+	u_char * cp, blank[NS_IN6ADDRSZ];
+    CODE:
+	if (!SvROK(buffer))
+	    XSRETURN_UNDEF;
+
+	buffer = SvRV(buffer);
+	(void)SvPV(buffer,size);			/* get size of buffer	*/
+
+	if (off > size)					/* punt if pointing beyond end of buff	*/
+	    XSRETURN_UNDEF;
+
+	if (off + NS_IN6ADDRSZ > size)
+	    sv_catpvn(buffer,blank,NS_IN6ADDRSZ);	/* extend buffer if needed	*/
+
+	cp = (u_char *)(SvPV(buffer, discard) + size);
+
+	memcpy(cp,ipv6addr,NS_IN6ADDRSZ);
+
+	RETVAL = (int)(size + NS_IN6ADDRSZ);
     OUTPUT:
 	RETVAL
 

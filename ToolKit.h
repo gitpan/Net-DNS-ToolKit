@@ -1,6 +1,6 @@
 /* ToolKit.h
  *
- * Copyright 2003, Michael Robinton <michael@bizsystems.com>
+ * Copyright 2003 - 2005, Michael Robinton <michael@bizsystems.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,4 +47,8 @@
 
 #ifndef NS_HFIXEDSZ
 #define NS_HFIXEDSZ	HFIXEDSZ
+#endif
+
+#ifndef NS_IN6ADDRSZ
+#define NS_IN6ADDRSZ	16
 #endif

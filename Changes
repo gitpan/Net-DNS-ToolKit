@@ -1,5 +1,13 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.24  Tue Feb 22 21:47:21 PST 2005
+	add IPv6 support for return records (not query)
+		ipv6_aton
+		ipv6_n2x
+		ipv6_n2d
+		getIPv6  
+		putIPv6
+
 0.23  Sat Nov 27 17:08:45 PST 2004
 	removed a legacy package 'use package'
 	that is not called in Net::DNS::ToolKit::Utilities
