@@ -536,6 +536,7 @@ sub rlook_rcv {
 
 =head1 DEPENDENCIES
 
+	IO::Socket
         Net::DNS::Codes
         Net::DNS::ToolKit
         Net::DNS::ToolKit::RR

@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNS::Toolkit
 
+0.21  Sat Sep 18 12:33:59 PDT 2004
+	update docs in Utilities.pm
+
 0.20  Wed Sep  1 15:56:25 PDT 2004
 	Create Utilities.pm from portions of
 	Mail::SpamCannibal::ScriptSupport
