@@ -15,7 +15,7 @@ use Net::DNS::Codes qw(TypeTxt ClassTxt);
 
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 sub DESTROY {}
 
@@ -121,7 +121,7 @@ sub parse {
 
 =head1 DEPENDENCIES
 
-	Net::DNS::TookKit
+	Net::DNS::ToolKit
 
 =head1 EXPORT
 

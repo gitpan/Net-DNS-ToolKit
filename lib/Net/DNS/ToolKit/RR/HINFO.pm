@@ -5,7 +5,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.01 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 require Net::DNS::ToolKit::RR::TXT;
 
@@ -25,8 +25,8 @@ Net::DNS::ToolKit::RR::HINFO - Resource Record Handler
   class Net::DNS::ToolKit::RR and its methods
   are instantiated in a 'special' manner.
 
-  use Net::DNS::TookKit::RR;
-  ($get,$put,$parse) = new Net::DNS::TookKit::RR;
+  use Net::DNS::ToolKit::RR;
+  ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
 
   ($newoff,$name,$type,$class,$ttl,$rdlength,
         @txtstrings) = $get->HINFO(\$buffer,$offset);
@@ -147,7 +147,7 @@ Append a HINFO record to $buffer.
 The method will insert the $rdlength and @txtstrings, then
 pass through the updated pointer to the array of compressed names            
 
-The class loader, B<Net::DNS::TookKit::RR>, inserts the @common elements and
+The class loader, B<Net::DNS::ToolKit::RR>, inserts the @common elements and
 returns updated @dnptrs. This module knows how to insert its RDATA of two
 text strings up to 255 characters long and
 calculate the $rdlength of the entire record.
@@ -173,7 +173,7 @@ sub put {
 =item * (@COMMON,@txtstrings)=$parse->HINFO(@common,@txtstrings);
 
 Converts binary/numeric field data into human readable form. The common RR
-elements are supplied by the class loader, B<Net::DNS::TookKit::RR>.
+elements are supplied by the class loader, B<Net::DNS::ToolKit::RR>.
 For HINFO RR's, this is a null operation.
 
   input:	2 text strings
@@ -183,7 +183,7 @@ For HINFO RR's, this is a null operation.
 
 =head1 DEPENDENCIES
 
-	Net::DNS::TookKit
+	Net::DNS::ToolKit
 	Net::DNS::Codes
 
 =head1 EXPORT

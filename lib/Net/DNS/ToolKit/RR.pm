@@ -18,7 +18,7 @@ use Net::DNS::ToolKit qw(
 use vars qw($VERSION $autoload *sub);
 require Net::DNS::ToolKit::Question;
 
-$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.04 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 sub remoteload {
     *sub = $autoload;
@@ -385,7 +385,7 @@ HERE IS THE OPPORTUNITY FOR YOU TO ADD TO THIS PACKAGE.
 If your RR of interest is not supported, see:
 
   Net::DNS::ToolKit::RR::Template in:
-  .../Net/DNS/TookKit/Template/Template.pm
+  .../Net/DNS/ToolKit/Template/Template.pm
 
 Build the support for your Resource Record and submit it to CPAN as an
 extension to this package.
@@ -532,7 +532,7 @@ __END__
 
 =head1 DEPENDENCIES
 
-	Net::DNS::TookKit
+	Net::DNS::ToolKit
 
 =head1 EXPORT
 

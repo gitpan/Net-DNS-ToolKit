@@ -14,6 +14,8 @@ use Net::DNS::ToolKit qw(
 use Net::DNS::Codes qw(:constants);
 use vars qw($VERSION);
 
+$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+
 =head1 NAME
 
 Net::DNS::ToolKit::RR::NULL - Resource Record Handler
@@ -27,8 +29,8 @@ Net::DNS::ToolKit::RR::NULL - Resource Record Handler
   class Net::DNS::ToolKit::RR and its methods
   are instantiated in a 'special' manner.
 
-  use Net::DNS::TookKit::RR;
-  ($get,$put,$parse) = new Net::DNS::TookKit::RR;
+  use Net::DNS::ToolKit::RR;
+  ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
 
   ($newoff,$name,$type,$class,$ttl,$rdlength,
         $anydata) = $get->NULL(\$buffer,$offset);
@@ -156,7 +158,7 @@ Append a NULL record to $buffer.
 The method will insert the $rdlength and $anydata, then
 pass through the updated pointer to the array of compressed names            
 
-The class loader, B<Net::DNS::TookKit::RR>, inserts the @common elements and
+The class loader, B<Net::DNS::ToolKit::RR>, inserts the @common elements and
 returns updated @dnptrs. This module knows how to insert its RDATA and
 calculate the $rdlength.
 
@@ -187,7 +189,7 @@ sub put {
 =item * (@COMMON,$anydata) = $parse->NULL(@common,$anydata);
 
 Converts binary/numeric field data into human readable form. The common RR
-elements are supplied by the class loader, B<Net::DNS::TookKit::RR>.
+elements are supplied by the class loader, B<Net::DNS::ToolKit::RR>.
 For NULL RR's, this is a null operation.
 
   input:	lots of bytes
@@ -204,7 +206,7 @@ sub parse {
 
 =head1 DEPENDENCIES
 
-	Net::DNS::TookKit
+	Net::DNS::ToolKit
 	Net::DNS::Codes
 	Net::DNS::ToolKit::RR::TXT
 

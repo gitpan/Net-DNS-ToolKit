@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNS::Toolkit
 
+0.14  Mon Sep 29 10:22:30 PDT 2003
+	removed type "TookKit" in numerous places
+
 First BETA release
 0.13  Thu Sep 25 11:14:25 PDT 2003
 	add Makefile constant MY_POD2TEXT

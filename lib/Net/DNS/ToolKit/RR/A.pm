@@ -7,7 +7,7 @@ use strict;
 use vars qw($VERSION @ISA);
 require Net::DNS::ToolKit::RR::Template;
 
-$VERSION = do { my @r = (q$Revision: 0.01 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @ISA = qw(Net::DNS::ToolKit::RR::Template);
 
@@ -33,8 +33,8 @@ Net::DNS::ToolKit::RR::A - Resource Record Handler
   class Net::DNS::ToolKit::RR and its methods
   are instantiated in a 'special' manner.
 
-  use Net::DNS::TookKit::RR;
-  ($get,$put,$parse) = new Net::DNS::TookKit::RR;
+  use Net::DNS::ToolKit::RR;
+  ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
 
   ($newoff,$name,$type,$class,$ttl,$rdlength,
 	$netaddr) = $get->A(\$buffer,$offset);
@@ -150,7 +150,7 @@ Append an A record to $buffer.
 The B<A> method will insert the $rdlength and $netaddr, then
 pass through the updated pointer to the array of compressed names
 
-The class loader, B<Net::DNS::TookKit::RR>, inserts the @common elements and
+The class loader, B<Net::DNS::ToolKit::RR>, inserts the @common elements and
 returns updated @dnptrs. This module knows how to insert its RDATA and calculate the $rdlength.
 
   input:	pointer to buffer,
@@ -169,7 +169,7 @@ returns updated @dnptrs. This module knows how to insert its RDATA and calculate
 =item * (@COMMON,$RDATA) = $parse->A(@common,$rdata,...);
 
 Converts binary/numeric field data into human readable form. The common RR
-elements are supplied by the class loader, B<Net::DNS::TookKit::RR>. This
+elements are supplied by the class loader, B<Net::DNS::ToolKit::RR>. This
 module knows how to parse its RDATA.
 
 	EXAMPLE
@@ -207,7 +207,7 @@ output:
 
 =head1 DEPENDENCIES
 
-	Net::DNS::TookKit
+	Net::DNS::ToolKit
 	Net::DNS::ToolKit::RR::Template
 	Net::DNS::Codes
 
