@@ -1,9 +1,15 @@
 Revision history for Perl extension Net::DNS::Toolkit
 
+0.17  Fri Jun  4 13:23:16 PDT 2004
+	correct documentation error for "parse_char"
+	correct documentation error in Net::DNS::ToolKit::RR::CNAME v0.04
+
+	add script 'rdns_blk.pl' to do lookups on cidr24 reverse IP's
+
 0.16  Sat Nov 22 14:32:27 PST 2003
 	There is a bug that I can't reproduce here on either the 
 	linux or sun boxes for version of perl 5.003 -> 5.8x so I've
-	added trap a in get_ns.t to check hosts for problems with 
+	added a trap in get_ns.t to check hosts for problems with 
 	resolver not returning the local host name server IP addy's
 	Hopefully, someone will find such a host and provide a user
 	account so I can find the problem and fix it.

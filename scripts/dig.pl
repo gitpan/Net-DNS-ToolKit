@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # dig.pl
-my $version = 1.06;	# 9-19-03 Michael Robinton <michael@bizsystems.com>
+my $version = 1.07;	# 1-30-04 Michael Robinton <michael@bizsystems.com>
 
 #
 # Copyright 2003, Michael Robinton <michael@bizsystems.com>
@@ -89,6 +89,7 @@ my %allowed = (
 	AXFR	=>	T_AXFR,
 	ANY	=>	T_ANY,
 	TXT	=>	T_TXT,
+	PTR	=>	T_PTR,
 );
 
 my($class);

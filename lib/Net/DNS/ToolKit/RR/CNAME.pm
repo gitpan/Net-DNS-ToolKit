@@ -5,7 +5,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.04 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 require Net::DNS::ToolKit::RR::NS;       
 
@@ -30,12 +30,12 @@ Net::DNS::ToolKit::RR::CNAME - Resource Record Handler
   ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
 
   ($newoff,$name,$type,$class,$ttl,$rdlength,
-        $cname) = $get->NS(\$buffer,$offset);
+        $cname) = $get->CNAME(\$buffer,$offset);
 
-  Note: the $get->NS method is normally called
+  Note: the $get->CNAME method is normally called
   via:  @stuff = $get->next(\$buffer,$offset);
 
-  ($newoff,@dnptrs)=$put->NS(\$buffer,$offset,\@dnptrs,
+  ($newoff,@dnptrs)=$put->CNAME(\$buffer,$offset,\@dnptrs,
 	$name,$type,$class,$ttl,$cname);
 
   $NAME,$TYPE,$CLASS,$TTL,$rdlength,$CNAME) 
@@ -44,8 +44,8 @@ Net::DNS::ToolKit::RR::CNAME - Resource Record Handler
 
 =head1 DESCRIPTION
 
-B<Net::DNS::ToolKit::RR:NS> appends an NS resource record to a DNS packet under
-construction, recovers an NS resource record from a packet being decoded, and 
+B<Net::DNS::ToolKit::RR:CNAME> appends an CNAME resource record to a DNS packet under
+construction, recovers an CNAME resource record from a packet being decoded, and 
 converts the numeric/binary portions of the resource record to human
 readable form.
 

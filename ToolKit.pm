@@ -13,7 +13,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.16 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.17 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -167,7 +167,7 @@ Net::DNS::ToolKit - tools for working with DNS packets
 	= gethead(\$buffer);
   $newoff = newhead(\$buffer,$id,$flags,
 	$qdcount,$ancount,$nscount,$arcount);
-  ($b,$h,$d,$a)=parse_char($buffer,$offset);
+  ($b,$h,$d,$a)=parse_char($char);
   ($newoff,$name) = dn_expand(\$buffer,$offset);
   ($newoff,@dnptrs)=dn_comp(\$buffer,$offset,\$name,\@dnptrs);
   $dotquad = inet_ntoa($netaddr);
@@ -823,6 +823,57 @@ To install this module, type:
 
 	perl 5.00503
 	Net::DNS::Codes 0.06
+
+=head1 EXAMPLES
+
+See the B<scripts> directory in this distribution
+
+=over 4
+
+=item * dig.pl
+
+A script that functions like B<dig> in the BIND distribution. It provides
+additional functionality in that it will dump the packet buffer contents for
+inspection in debug mode. It is easily modified to add features.
+
+ Syntax:
+ dig.pl [@server] [+tcp] [-d] [-p port#] [-t type] name
+
+ server is the name or IP address of the name server to query.  An IPv4
+        address can be provided in dotted-decimal notation.  When the
+        supplied server argument is a hostname, dig resolves that name
+        before querying that name server.
+
+  +tcp  only use TCP protocol
+
+  -d    print the query to the console
+
+  -p    port# is the port number that dig.pl will send its queries 
+        instead of the standard DNS port number 53.
+
+  -t    indicates what type of query is required. This script supports
+        only A, MX, NS, CNAME, SOA, TXT, and ANY queries as well as
+        AXFR record transfers. If no type argument is supplied, dig.pl
+        will perform a lookup for an A record
+
+ name   is the name of the resource record that is to be looked up.
+
+=item * rdns_blk.pl
+
+A script to lookup an entire class "C" set of PTR records recursively.
+This is useful hunting spam domains where many DNS's do not allow AXFR
+record transfers to inspect what is in a range of IP addresses.
+
+ Syntax:
+  ./rdns_blk.pl nn.nn.nn[.nn]
+
+  at least the first three groups of 
+  dot.quad.addr numbers
+
+  returns PTR results for 1..255 of address range
+  skips non-existent records, notes timeouts
+
+=back
 
 =head1 EXPORT
 
