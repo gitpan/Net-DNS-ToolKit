@@ -1,5 +1,18 @@
 Revision history for Perl extension Net::DNS::Toolkit
 
+0.20  Wed Sep  1 15:56:25 PDT 2004
+	Create Utilities.pm from portions of
+	Mail::SpamCannibal::ScriptSupport
+
+	see comments in Mail::SpamCannibal v0.44 Changes
+
+0.19  not released
+	update rdns_blk.pl v0.03, add optional -d switch
+	to show rDNS response for bad lookups
+
+0.18  Thu Jun 24 15:38:36 PDT 2004
+	update rdns_blk.pl v0.02 to print PTR when response is a C_NAME
+
 0.17  Fri Jun  4 13:23:16 PDT 2004
 	correct documentation error for "parse_char"
 	correct documentation error in Net::DNS::ToolKit::RR::CNAME v0.04

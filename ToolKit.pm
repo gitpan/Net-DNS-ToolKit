@@ -13,7 +13,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.17 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.20 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -967,7 +967,8 @@ inet_aton, inet_ntoa are from the perl-5.8.0 release by Larry Wall, copyright
 
 =head1 See also:
 
-Net::DNS::Codes(3), Net::DNS::ToolKit::RR(3), Net::DNS::ToolKit::Debug(3)
+Net::DNS::Codes(3), Net::DNS::ToolKit::RR(3), Net::DNS::ToolKit::Debug(3),
+Net::DNS::ToolKit::Utilities
 
 =cut
 

@@ -15,10 +15,12 @@ extra_docs/rfc1034.txt
 extra_docs/rfc1035.txt
 extra_docs/rfc883.txt
 scripts/dig.pl
+scripts/rdns_blk.pl
 xs_include/dn_expand.inc
 xs_include/miniSocket.inc
 lib/Net/DNS/ToolKit/Debug.pm
 lib/Net/DNS/ToolKit/Question.pm
+lib/Net/DNS/ToolKit/Utilities.pm
 lib/Net/DNS/ToolKit/RR.pm
 lib/Net/DNS/ToolKit/RR/A.pm
 lib/Net/DNS/ToolKit/RR/CNAME.pm
@@ -66,6 +68,7 @@ t/put1632.t
 t/put1char.t
 t/put_counts.t
 t/sec2time.t
+t/ss_id.t
 t/string.t
 t/string_off.t
 t/ttlAlpha2Num.t

@@ -630,5 +630,5 @@ COPYRIGHT
 
 See also:
     Net::DNS::Codes(3), Net::DNS::ToolKit::RR(3),
-    Net::DNS::ToolKit::Debug(3)
+    Net::DNS::ToolKit::Debug(3), Net::DNS::ToolKit::Utilities
 
