@@ -6,13 +6,12 @@ use strict;
 
 use vars qw($VERSION @ISA @EXPORT_OK $ID);
 
-$VERSION = do { my @r = (q$Revision: 0.01 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 use AutoLoader 'AUTOLOAD';
 
 use Config;
 use IO::Socket;
-use IPTables::IPv4::DBTarpit::Tools;
 use NetAddr::IP;
 use Net::DNS::Codes qw(
 	T_ANY
