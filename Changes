@@ -1,0 +1,58 @@
+Revision history for Perl extension Net::DNS::Toolkit
+
+First BETA release
+0.13  Thu Sep 25 11:14:25 PDT 2003
+	add Makefile constant MY_POD2TEXT
+
+0.12  Sun Sep 21 14:57:34 PDT 2003
+	add siteconf to define u_intxx_t on systems
+	where they are undefined
+
+0.11  Fri Sep 19 11:09:02 PDT 2003
+	putstring did not actually append at 'offset', instead
+	it always appended. Fix so it appends at offset.
+
+	RR::SOA, bad pointer to @dnptrs fixed,
+	RR::SOA, incorrectly calculated RDLENGTH
+
+0.10  Mon Sep 15 16:34:53 PDT 2003
+	update scripts/dig.pl to support +tcp flag
+	and the retrieval of multirecord zone transfers
+
+0.09  Tue Aug  5 15:14:56 PDT 2003
+	dn_comp pointer to dnptrs needed to be checked
+	that is was an RV. The RV value sometimes comes
+	back as an SVt_PVMG and sometimes a plain SVt_PV
+
+0.08  Thu Jul 31 18:35:44 PDT 2003
+	fixed bug in dig.pl where it would
+	loop if the dns server failed to respond
+	correctly to an axfr request.
+
+0.07  Sat Jul  5 21:40:45 PDT 2003
+	add 'put1char', update RR TXT to conform to
+	current BIND specifications, add RR HINFO,
+	extend Question to pick up $class from 
+	new statement but not override its own
+	$class argument.
+
+0.06  Sat Jun 28 18:05:31 PDT 2003
+	add work-around for perl 5.00503's missing newSVuv
+
+0.05  Wed Jun 25 08:23:49 PDT 2003
+	back port to perl 5.00503
+	gcc version egcs-2.91.66 19990314/Linux (egcs-1.1.2 release)
+	initial release
+
+0.04  Tue Jun 24 22:36:03 PDT 2003
+	various small edits for clean up
+
+0.03  Tue Jun 24 18:27:52 PDT 2003
+	change dn_comp to use a pointer
+	to array of dnptrs
+
+0.02  Wed Jun 18 22:21:33 PDT 2003
+	many additions
+
+0.01  Sat Jun 14 15:45:32 PDT 2003
+	alpha release
