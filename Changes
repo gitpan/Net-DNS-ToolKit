@@ -1,5 +1,11 @@
 Revision history for Perl extension Net::DNS::Toolkit
 
+0.22  Sun Nov 14 23:33:19 PST 2004
+	corrected a 'use package' call in t/ss_id.t
+	call should be to Net::DNS::Toolkit::Utilities
+	and was to a legacy package that is not a dependency
+	of this module
+
 0.21  Sat Sep 18 12:33:59 PDT 2004
 	update docs in Utilities.pm
 
