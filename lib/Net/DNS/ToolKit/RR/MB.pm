@@ -36,7 +36,7 @@ Net::DNS::ToolKit::RR::MB - Resource Record Handler
   via:  @stuff = $get->next(\$buffer,$offset);
 
   ($newoff,@dnptrs)=$put->MB(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$madname);
+	$name,$type,$class,$ttl,$madname);
 
   $NAME,$TYPE,$CLASS,$TTL,$rdlength,$MADNAME) 
     = $parse->XYZ($name,$type,$class,$ttl,$rdlength,
@@ -129,7 +129,7 @@ how to retrieve B<$madname>.
 		MB Domain Name
 
 =item * ($newoff,@dnptrs)=$put->MB(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$madname);
+	$name,$type,$class,$ttl,$madname);
 
 Append an MB record to $buffer.
 

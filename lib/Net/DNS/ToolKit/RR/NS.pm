@@ -11,7 +11,7 @@ use Net::DNS::ToolKit qw(
 use Net::DNS::Codes qw(:constants);
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 =head1 NAME
 
@@ -36,7 +36,7 @@ Net::DNS::ToolKit::RR::NS - Resource Record Handler
   via:  @stuff = $get->next(\$buffer,$offset);
 
   ($newoff,@dnptrs)=$put->NS(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$nsdname);
+	$name,$type,$class,$ttl,$nsdname);
 
   $NAME,$TYPE,$CLASS,$TTL,$rdlength,$NSDNAME) 
     = $parse->NS($name,$type,$class,$ttl,$rdlength,
@@ -148,7 +148,7 @@ sub get {
 }
 
 =item * ($newoff,@dnptrs)=$put->NS(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$nsdname);
+	$name,$type,$class,$ttl,$nsdname);
 
 Append an NS record to $buffer.
 

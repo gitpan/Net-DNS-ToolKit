@@ -13,7 +13,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.15 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.16 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -862,6 +862,19 @@ collapse
 strip
 get_ns
 gettimeofday
+
+=head1 BUGS
+
+There have been some reports of the "C" library function for 
+
+  "int res_init(void);
+
+not properly returning the local resolver nameserver configuration
+information for certain Perl 5.6 -> 5.8 hosts. This is for the ToolKit function "get_ns()".
+
+I have been unable to duplicate this on any of the ix86 Linux or Sun-Sparc systems that I have. 
+If you have a system that exhibits this problem and can provide a user account, I'd
+appreciate it if you would contact me so I can fix it.
 
 =head1 AUTHOR
 

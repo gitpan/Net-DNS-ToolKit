@@ -5,7 +5,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..1\n"; }
+BEGIN { $| = 1; print "1..2\n"; }
 END {print "not ok 1\n" unless $loaded;}
 
 use Net::DNS::ToolKit qw(
@@ -31,7 +31,27 @@ sub ok {
 my @netaddrs = get_ns();
 
 my $output = "\n\tlocal nameserver(s)\n";
-foreach(@netaddrs) {
-  $output .= "\t".inet_ntoa($_)."\n";
+if (@netaddrs) {
+  foreach(@netaddrs) {
+    $output .= "\t".inet_ntoa($_)."\n";
+  }
+  print STDERR $output;
+} else {
+  select STDERR; $| = 1;
+  select STDOUT;
+  print STDERR q|
+The resolver library did not return any nameservers. This could
+mean that your system is not properly configured, or more likely
+that the ToolKit.pm interface to the "C" resolver library is not
+working properly. 
+
+This latter condition has been reported with versions of perl 5.8x
+on some systems, however the author has not been able to duplicate
+it on in house hosts. If you have a system that exhibits this problem
+and can provide a shell account for debug purposes, please contact 
+the author, Michael Robinton <michael@bizsystems.com> .
+|;
+  sleep 1;
+  print "\nnot ";
 }
-print STDERR $output;
+print "ok 2\n";

@@ -5,7 +5,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 require Net::DNS::ToolKit::RR::NS;       
 
@@ -36,7 +36,7 @@ Net::DNS::ToolKit::RR::MR - Resource Record Handler
   via:  @stuff = $get->next(\$buffer,$offset);
 
   ($newoff,@dnptrs)=$put->MR(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$madname);
+	$name,$type,$class,$ttl,$madname);
 
   $NAME,$TYPE,$CLASS,$TTL,$rdlength,$MADNAME) 
     = $parse->XYZ($name,$type,$class,$ttl,$rdlength,
@@ -133,7 +133,7 @@ how to retrieve B<$madname>.
 		MR Domain Name
 
 =item * ($newoff,@dnptrs)=$put->MR(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$madname);
+	$name,$type,$class,$ttl,$madname);
 
 Append an MR record to $buffer.
 

@@ -5,7 +5,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 require Net::DNS::ToolKit::RR::NS;       
 
@@ -36,7 +36,7 @@ Net::DNS::ToolKit::RR::PTR - Resource Record Handler
   via:  @stuff = $get->next(\$buffer,$offset);
 
   ($newoff,@dnptrs)=$put->PTR(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$ptrdname);
+	$name,$type,$class,$ttl,$ptrdname);
 
   $name,$TYPE,$CLASS,$TTL,$rdlength,$IPaddr) 
     = $parse->XYZ($name,$type,$class,$ttl,$rdlength,
@@ -134,7 +134,7 @@ how to retrieve B<$ptrdname>.
 		PTR Domain Name
 
 =item * ($newoff,@dnptrs)=$put->PTR(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$ptrdname);
+	$name,$type,$class,$ttl,$ptrdname);
 
 Append an PTR record to $buffer.
 
