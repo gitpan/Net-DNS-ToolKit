@@ -13,7 +13,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.14 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.15 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -870,7 +870,7 @@ Michael Robinton <michael@bizsystems.com>
 =head1 ACKNOWLEDGEMENTS
 
 The following functions are used in whole or in part as include files to
-TookKit.xs. The copyrights are include in the respective files.
+ToolKit.xs. The copyrights are include in the respective files.
 
   file:           functions:
 

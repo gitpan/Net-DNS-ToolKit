@@ -1,7 +1,15 @@
 Revision history for Perl extension Net::DNS::Toolkit
 
+0.15  Sat Nov  1 09:44:17 PST 2003
+	change RR module instantiation from eval {some code}
+	to an eval "$code" in RR.pm. A problem arose where 
+	simltaneous instantations overwrote the namespace with
+	the old method.
+
+	missed typo "TookKit" in ToolKit.pm
+
 0.14  Mon Sep 29 10:22:30 PDT 2003
-	removed type "TookKit" in numerous places
+	removed typo "TookKit" in numerous places
 
 First BETA release
 0.13  Thu Sep 25 11:14:25 PDT 2003

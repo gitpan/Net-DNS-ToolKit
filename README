@@ -537,7 +537,7 @@ AUTHOR
 
 ACKNOWLEDGEMENTS
     The following functions are used in whole or in part as include files to
-    TookKit.xs. The copyrights are include in the respective files.
+    ToolKit.xs. The copyrights are include in the respective files.
 
       file:           functions:
 

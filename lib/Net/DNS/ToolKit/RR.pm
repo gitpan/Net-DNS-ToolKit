@@ -18,20 +18,27 @@ use Net::DNS::ToolKit qw(
 use vars qw($VERSION $autoload *sub);
 require Net::DNS::ToolKit::Question;
 
-$VERSION = do { my @r = (q$Revision: 0.04 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.05 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 sub remoteload {
-    *sub = $autoload;
+#    *sub = $autoload;
     (my $RRtype = $autoload ) =~ s/.*::(\w+):://;
     # function = $1, one of get,put,parse
     ($autoload,$_) = instantiate($RRtype,$1);
+#    my $code = 'package '. __PACKAGE__ .'::'. $1 .'; '.'*'. $RRtype .'=\&'. $autoload;
+    my $code = 'package '. __PACKAGE__ .'::'. $1 .'; '.'*'. $RRtype .
+	q| = sub { unshift @_,'|. $autoload . q|'; &|. $_ .'};';
+    eval "$code";
 
 # print "AUTOLOAD=",*sub,";\n";
 # print "subname=$autoload RRtype=$RRtype func=$1\n";
+# print 'code=', $code, "\n";
 
-    no strict;
-    eval { *sub = sub { unshift @_,$autoload; &$_ } };
-    goto &{*sub};
+#    no strict;
+#    eval { *sub = sub { unshift @_,$autoload; &$_ } };
+#    goto &{*sub};
+    unshift @_,$autoload;
+    goto &$_;
 }
 
 # return target function, target interpreter
@@ -98,7 +105,7 @@ sub RRget {
 sub RRput {
   # extract common elements from input, shrink input
   # input was: $function,$self,\$buffer,$offset,\@dnptrs,$name,$type,$class,$ttl,@rdata
-  my ($func,$put,$bp,$off,$dnp,$name,$type,$class,$ttl);
+  my ($func,$put,$bp,$off,$dnp,$name,$type,$class,$ttl) = @_;
   if (exists $_[1]->{class}) {
     ($func,$put,$bp,$off,$dnp,$name,$ttl) = splice(@_,0,7);
     $class = $put->{class};
