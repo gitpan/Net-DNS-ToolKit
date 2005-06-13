@@ -13,7 +13,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.24 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.25 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -637,7 +637,7 @@ Creat a new header and return the offset to question
 sub newhead {
   my($bp,$id,$flags,$qdcount,$ancount,$nscount,$arcount) = @_;
   return undef unless ref $bp;
-  return undef unless $id;
+  return undef unless defined $id;
   $qdcount = 0 unless $qdcount;
   $ancount = 0 unless $ancount;
   $nscount = 0 unless $nscount;
