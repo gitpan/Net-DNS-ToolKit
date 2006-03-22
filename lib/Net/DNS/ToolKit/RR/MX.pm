@@ -12,7 +12,7 @@ use Net::DNS::ToolKit qw(
 use Net::DNS::Codes qw(:constants);
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 =head1 NAME
 
@@ -193,7 +193,7 @@ sub put {
   return(@_);
 }
 
-=item * (@COMMON,$pref,$MXDNAME) = $parse->A(@common,$pref,$mxdname);
+=item * (@COMMON,$pref,$MXDNAME) = $parse->MX(@common,$pref,$mxdname);
 
 Converts binary/numeric field data into human readable form. The common RR
 elements are supplied by the class loader, B<Net::DNS::ToolKit::RR>.

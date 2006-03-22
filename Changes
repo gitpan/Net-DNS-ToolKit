@@ -1,5 +1,13 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.26  Tue Mar 21 19:44:57 PST 2006
+	update MX.pm to correct documentation typo
+
+	fix ipv6_aton to correctly convert pathological case of
+	::1:2:3:4:5:6:7 and 1:2:3:4:5:6:7:: where there are 8 colons
+	i.e. ::nnn... ...nnn:: 	instead of starting or ending with 
+	:nnn nnn: or 0:nnn... ...nnn:0
+
 0.25  Sat Jun 11 23:34:32 PDT 2005
 	'new' failed to build a packet with a transaction ID of '0'
 	Thanks to "Clayton O'Neill" <coneill@oneill.net> for 

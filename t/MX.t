@@ -62,13 +62,6 @@ sub expect {
   return @exp;
 }
 
-sub print_ptrs {
-  foreach(@_) {
-    print "$_ ";
-  }
-  print "\n";
-}
-
 sub chk_exp {
   my($bp,$exp) = @_;
   my @expect = expect($$exp);

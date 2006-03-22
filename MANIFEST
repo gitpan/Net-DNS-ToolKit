@@ -87,3 +87,4 @@ Template/MANIFEST
 Template/Makefile.PL
 Template/Template.pm
 Template/t/Template.t
+META.yml                                 Module meta-data (added by MakeMaker)

@@ -5,7 +5,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..6\n"; }
+BEGIN { $| = 1; print "1..8\n"; }
 END {print "not ok 1\n" unless $loaded;}
 
 #use diagnostics;
@@ -70,4 +70,22 @@ print "ipv6addr got: $Taddr, exp: $IP6addr\nnot "
 ## test 6	check RV
 print "bad size $rv\nnot "
 	unless $rv == NS_IN6ADDRSZ;
+&ok;
+
+## test 7	check leading :: conversion on long value
+$IP6addr = '::1111:2222:3333:4444:5555:6666:7777';
+my $exp = '0:1111:2222:3333:4444:5555:6666:7777';
+$Taddr = ipv6_aton($IP6addr);
+$Taddr = ipv6_n2x($Taddr);
+print "got: $Taddr\nexp: $exp\nnot "
+	unless $Taddr eq $exp;
+&ok;
+
+## test 8	check trailing :: conversion on long value
+$IP6addr = '1111:2222:3333:4444:5555:6666:7777::';
+$exp = '1111:2222:3333:4444:5555:6666:7777:0';
+$Taddr = ipv6_aton($IP6addr);
+$Taddr = ipv6_n2x($Taddr);   
+print "got: $Taddr\nexp: $exp\nnot "
+	unless $Taddr eq $exp;
 &ok;

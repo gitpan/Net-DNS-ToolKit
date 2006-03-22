@@ -13,7 +13,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.25 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.26 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -740,6 +740,10 @@ sub ipv6_aton {
   return undef unless ($ipv6 =~ /(::|:[a-zA-Z0-9]+)$/);			# pure hex
   my $c = $ipv6 =~ tr/:/:/;						# count the colons
   return undef if $c < 7 && $ipv6 !~ /::/;
+  if ($c > 7) {
+    while ($ipv6 =~ s/^::/:/) {}
+    while ($ipv6 =~ s/::$/:/) {}
+  }
   while ($c++ < 7) {							# expand compressed fields
     $ipv6 =~ s/::/:::/;
   }
