@@ -1,11 +1,12 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         Net-DNS-ToolKit
-version:      0.26
+version:      0.28
 version_from: ToolKit.pm
 installdirs:  site
 requires:
     Net::DNS::Codes:               0.06
+    NetAddr::IP::Util:             0.11
 
 distribution_type: module
 generated_by: ExtUtils::MakeMaker version 6.30

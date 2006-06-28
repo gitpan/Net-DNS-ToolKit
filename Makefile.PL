@@ -6,9 +6,11 @@ use Config;
 WriteMakefile(
     'NAME'		=> 'Net::DNS::ToolKit',
     'VERSION_FROM'	=> 'ToolKit.pm', # finds $VERSION
-    'PREREQ_PM'		=> {	Net::DNS::Codes	=> 0.06 },
+    'PREREQ_PM'		=> {	Net::DNS::Codes	=> 0.06,
+				NetAddr::IP::Util => 0.11
+			},
     'LIBS'		=> ['-lresolv'], # e.g., '-lm'
-    'depend'		=> {'ToolKit.c'	=> 'ToolKit.h xs_include/dn_expand.inc xs_include/miniSocket.inc',
+    'depend'		=> {'ToolKit.c'	=> 'ToolKit.h xs_include/dn_expand.inc',
 			},
     'clean'		=> { FILES	=> "*.bs *.o *~ uIxxdefs.h config.log"},
 );
@@ -19,10 +21,10 @@ sub MY::top_targets {
 config  :: uIxxdefs.h
 	@$(NOOP)
 
-# siteconf CCname Cfile_ext OBJext EXEext "Cflags" "LDflags"
+# siteconf CCname Cfile_ext OBJext EXEext "Cflags" "LDflags" "LDLOADLIBS"
 #
 uIxxdefs.h :
-	./siteconf "$(CC)" ".c" "$(OBJ_EXT)" "$(EXE_EXT)" "$(CCFLAGS)" "$(LDFLAGS)"
+	./siteconf "$(CC)" ".c" "$(OBJ_EXT)" "$(EXE_EXT)" "$(CCFLAGS)" "$(LDFLAGS)" "$(LDLOADLIBS)"
 |;
   my $inherited = shift->SUPER::top_targets(@_);
   $inherited =~ s/(pure_all\s+::.+)/$1 README/;

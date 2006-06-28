@@ -21,7 +21,6 @@ extra_docs/rfc3596.txt
 scripts/dig.pl
 scripts/rdns_blk.pl
 xs_include/dn_expand.inc
-xs_include/miniSocket.inc
 lib/Net/DNS/ToolKit/Debug.pm
 lib/Net/DNS/ToolKit/Question.pm
 lib/Net/DNS/ToolKit/Utilities.pm

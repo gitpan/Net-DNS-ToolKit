@@ -38,7 +38,7 @@
 /* from	/usr/include/arpa/nameser_compat.h, modified a little	*/
 typedef struct {
 	unsigned	id :16;	 /* query identification number */
-#if BYTE_ORDER == BIG_ENDIAN
+#ifdef host_is_BIG_ENDIAN
 			/* fields in third byte */
 	unsigned	qr :1;		/* response flag */
 	unsigned	opcode :4;	/* purpose of message */
@@ -51,8 +51,8 @@ typedef struct {
 	unsigned	ad :1;		/* authentic data from named */
 	unsigned	cd :1;		/* checking disabled by resolver */
 	unsigned	rcode :4;	/* response code */
-#endif
-#if BYTE_ORDER == LITTLE_ENDIAN || BYTE_ORDER == PDP_ENDIAN
+#else
+# ifdef host_is_LITTLE_ENDIAN
 			/* fields in third byte */
 	unsigned	rd :1;		/* recursion desired */
 	unsigned	tc :1;		/* truncated message */
@@ -65,6 +65,9 @@ typedef struct {
 	unsigned	ad :1;		/* authentic data from named */
 	unsigned	z :1;		/* unused bits (MBZ as of 4.9.3a3) */
 	unsigned	ra :1;		/* recursion available */
+# else
+# error ENDIANness is not defined
+# endif
 #endif
 			/* remaining bytes */
 	unsigned	qdcount :16;    /* number of question entries */
@@ -126,7 +129,6 @@ PROTOTYPES: DISABLE
 
  # include functions for inet_aton, inet_ntoa, dn_expand
 
-INCLUDE: xs_include/miniSocket.inc
 INCLUDE: xs_include/dn_expand.inc
 
  # int dn_comp(unsigned char *exp_dn, unsigned char *comp_dn, 

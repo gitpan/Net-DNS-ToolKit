@@ -7,13 +7,14 @@ use strict;
 use Net::DNS::Codes 0.06 qw(:RRs :constants);
 use vars qw(@ISA $VERSION @EXPORT_OK %timeX);
 
+use NetAddr::IP::Util qw(:inet);
 require Exporter;
 require DynaLoader;
 use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.26 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.28 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -483,7 +484,7 @@ new offset pointer to the next char (usually end of buffer).
 
 =item * ($ipv6addr,$newoff)=getIPv6(\$buffer,$offset);
 
-Get an IPv6 newtork address from the buffer at $offset. Return the
+Get an IPv6 network address from the buffer at $offset. Return the
 ipv6addr and a new offset pointing at the next character beyond.
 
 Returns and empty array on error.
@@ -713,12 +714,16 @@ Convert a packed IPv4 network address to a dot-quad IP address.
   input:	packed network address
   returns:	IP address i.e. 10.4.12.123
 
+Imported/Exported from NetAdder::IP::Util
+
 =item * $netaddr = inet_aton($dotquad);
 
 Convert a dot-quad IP address into an IPv4 packed network address.
 
   input:	IP address i.e. 192.5.16.32
   returns:	packed network address
+
+Imported/Exported from NetAdder::IP::Util
 
 =item * $ipv6addr = ipv6_aton($ipv6_text);
 
@@ -728,44 +733,7 @@ and returns a 128 bit binary RDATA string.
   input:	ipv6 text
   returns:	128 bit RDATA string
 
-=cut
-
-sub ipv6_aton {
-  my($ipv6) = @_;
-  return undef unless $ipv6;
-  if ($ipv6 =~ /:(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/) {	# mixed hex, dot-quad
-    return undef if $1 > 255 || $2 > 255 || $3 > 255 || $4 > 255;
-    $ipv6 = sprintf("%s:%X%02X:%X%02X",$`,$1,$2,$3,$4);			# convert to pure hex
-  }
-  return undef unless ($ipv6 =~ /(::|:[a-zA-Z0-9]+)$/);			# pure hex
-  my $c = $ipv6 =~ tr/:/:/;						# count the colons
-  return undef if $c < 7 && $ipv6 !~ /::/;
-  if ($c > 7) {
-    while ($ipv6 =~ s/^::/:/) {}
-    while ($ipv6 =~ s/::$/:/) {}
-  }
-  while ($c++ < 7) {							# expand compressed fields
-    $ipv6 =~ s/::/:::/;
-  }
-#  my @hex = split(/:/,$ipv6);						# FAILS on :::::::
-  $ipv6 =~ /(\w*):(\w*):(\w*):(\w*):(\w*):(\w*):(\w*):(\w*)/;		# 8, 16 bit pieces
-  my @hex = ($1 || 0,$2 || 0,$3 || 0,$4 || 0,$5 || 0,$6 || 0,$7 || 0,$8 || 0);
-  $ipv6 = '';
-  my $off = 0;
-  foreach(@hex) {
-    $off = put16(\$ipv6,$off,hex($_));
-  }
-  return $ipv6;
-}
-
-sub _ipv6n2ary {
-  my($buf) = @_;
-  my @hex;
-  foreach(0..7) {
-    ($hex[$_]) = get16(\$buf,$_ << 1);
-  }
-  return @hex;
-}
+Imported/Exported from NetAdder::IP::Util
 
 =item * $hex_text = ipv6_n2x($ipv6addr);
 
@@ -774,11 +742,7 @@ Takes an IPv6 RDATA string and returns an 8 segment IPv6 hex address
   input:	128 bit RDATA string
   returns:	x:x:x:x:x:x:x:x
 
-=cut
-
-sub ipv6_n2x {
-  return sprintf("%X:%X:%X:%X:%X:%X:%X:%X",&_ipv6n2ary(@_));
-}
+Imported/Exported from NetAdder::IP::Util
 
 =item * $dec_text = ipv6_n2d($ipv6addr);
 
@@ -789,16 +753,7 @@ representation.
   input:	128 bit RDATA string
   returns:	x:x:x:x:x:x:d.d.d.d
 
-=cut
-
-sub ipv6_n2d {
-  my @hex = (_ipv6n2ary($_[0]),0,0);
-  $hex[9] = $hex[7] & 0xff;
-  $hex[8] = $hex[7] >> 8;
-  $hex[7] = $hex[6] & 0xff;
-  $hex[6] >>= 8;
-  return sprintf("%X:%X:%X:%X:%X:%X:%d.%d.%d.%d",@hex);
-}
+Imported/Exported from NetAdder::IP::Util
 
 =item * $timetxt = sec2time($seconds);
 
@@ -1065,17 +1020,13 @@ ToolKit.xs. The copyrights are include in the respective files.
   file:           functions:
 
   dn_expand.inc   dn_expand
-  miniSocket.inc  inet_aton, inet_ntoa
 
 dn_expand is from Michael Fuhr's Net::DNS package (DNS.pm), copyright (c)
 1997-2002. Thank you Michael.
 
-inet_aton, inet_ntoa are from the perl-5.8.0 release by Larry Wall, copyright
-1989-2002. Thank you Larry for making PERL possible for all of us.
-
 =head1 COPYRIGHT
 
-    Copyright 2003, Michael Robinton <michael@bizsystems.com>
+    Copyright 2003 - 2006, Michael Robinton <michael@bizsystems.com>
    
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1094,7 +1045,7 @@ inet_aton, inet_ntoa are from the perl-5.8.0 release by Larry Wall, copyright
 =head1 See also:
 
 Net::DNS::Codes(3), Net::DNS::ToolKit::RR(3), Net::DNS::ToolKit::Debug(3),
-Net::DNS::ToolKit::Utilities
+Net::DNS::ToolKit::Utilities, NetAdder::IP::Util
 
 =cut
 

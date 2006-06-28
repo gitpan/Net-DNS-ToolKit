@@ -1,5 +1,15 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.28  Mon Jun  5 15:04:20 PDT 2006
+	remove references to miniSocket.inc in Makefile.PL
+	this is now imported from NetAddr/IP/Util
+
+	fix solaris compiler ENDIANness problems
+
+0.27  Tue Mar 28 21:02:54 PST 2006
+	migrate inex_xxx and ipv6_xxx functions to 
+	NetAddr::IP::Util
+
 0.26  Tue Mar 21 19:44:57 PST 2006
 	update MX.pm to correct documentation typo
 

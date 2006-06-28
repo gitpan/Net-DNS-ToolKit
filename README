@@ -278,7 +278,7 @@ DESCRIPTION
           returns:      pointer to end of buffer
 
     * ($ipv6addr,$newoff)=getIPv6(\$buffer,$offset);
-        Get an IPv6 newtork address from the buffer at $offset. Return the
+        Get an IPv6 network address from the buffer at $offset. Return the
         ipv6addr and a new offset pointing at the next character beyond.
 
         Returns and empty array on error.
@@ -483,11 +483,15 @@ DESCRIPTION
           input:        packed network address
           returns:      IP address i.e. 10.4.12.123
 
+        Imported/Exported from NetAdder::IP::Util
+
     * $netaddr = inet_aton($dotquad);
         Convert a dot-quad IP address into an IPv4 packed network address.
 
           input:        IP address i.e. 192.5.16.32
           returns:      packed network address
+
+        Imported/Exported from NetAdder::IP::Util
 
     * $ipv6addr = ipv6_aton($ipv6_text);
         Takes an IPv6 address of the form described in rfc1884 and returns a
@@ -496,11 +500,15 @@ DESCRIPTION
           input:        ipv6 text
           returns:      128 bit RDATA string
 
+        Imported/Exported from NetAdder::IP::Util
+
     * $hex_text = ipv6_n2x($ipv6addr);
         Takes an IPv6 RDATA string and returns an 8 segment IPv6 hex address
 
           input:        128 bit RDATA string
           returns:      x:x:x:x:x:x:x:x
+
+        Imported/Exported from NetAdder::IP::Util
 
     * $dec_text = ipv6_n2d($ipv6addr);
         Takes an IPv6 RDATA string and returns a mixed hex - decimal IPv6
@@ -509,6 +517,8 @@ DESCRIPTION
 
           input:        128 bit RDATA string
           returns:      x:x:x:x:x:x:d.d.d.d
+
+        Imported/Exported from NetAdder::IP::Util
 
     * $timetxt = sec2time($seconds);
         Convert numeric seconds into a string of the form
@@ -658,17 +668,12 @@ ACKNOWLEDGEMENTS
       file:           functions:
 
       dn_expand.inc   dn_expand
-      miniSocket.inc  inet_aton, inet_ntoa
 
     dn_expand is from Michael Fuhr's Net::DNS package (DNS.pm), copyright
     (c) 1997-2002. Thank you Michael.
 
-    inet_aton, inet_ntoa are from the perl-5.8.0 release by Larry Wall,
-    copyright 1989-2002. Thank you Larry for making PERL possible for all of
-    us.
-
 COPYRIGHT
-        Copyright 2003, Michael Robinton <michael@bizsystems.com>
+        Copyright 2003 - 2006, Michael Robinton <michael@bizsystems.com>
    
         This program is free software; you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -686,5 +691,6 @@ COPYRIGHT
 
 See also:
     Net::DNS::Codes(3), Net::DNS::ToolKit::RR(3),
-    Net::DNS::ToolKit::Debug(3), Net::DNS::ToolKit::Utilities
+    Net::DNS::ToolKit::Debug(3), Net::DNS::ToolKit::Utilities,
+    NetAdder::IP::Util
 

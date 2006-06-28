@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #endif
 
-#include "uIxxdefs.h"
+#include "localStuff.h"
 
 #ifndef _U_INTXX_DEFINES_H
 #define _U_INTXX_DEFINES_H
