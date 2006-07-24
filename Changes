@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.29  Mon Jul 24 14:07:10 PDT 2006
+	remove unused reference to NetAddr::IP in
+	Net::DNS::ToolKit::Utilities
+
 0.28  Mon Jun  5 15:04:20 PDT 2006
 	remove references to miniSocket.inc in Makefile.PL
 	this is now imported from NetAddr/IP/Util
