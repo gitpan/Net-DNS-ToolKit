@@ -29,6 +29,7 @@ lib/Net/DNS/ToolKit/RR/A.pm
 lib/Net/DNS/ToolKit/RR/AAAA.pm
 lib/Net/DNS/ToolKit/RR/CNAME.pm
 lib/Net/DNS/ToolKit/RR/HINFO.pm
+lib/Net/DNS/ToolKit/RR/MINFO.pm
 lib/Net/DNS/ToolKit/RR/MB.pm
 lib/Net/DNS/ToolKit/RR/MG.pm
 lib/Net/DNS/ToolKit/RR/MR.pm
@@ -36,12 +37,14 @@ lib/Net/DNS/ToolKit/RR/MX.pm
 lib/Net/DNS/ToolKit/RR/NS.pm
 lib/Net/DNS/ToolKit/RR/NULL.pm
 lib/Net/DNS/ToolKit/RR/PTR.pm
+lib/Net/DNS/ToolKit/RR/RP.pm
 lib/Net/DNS/ToolKit/RR/SOA.pm
 lib/Net/DNS/ToolKit/RR/TXT.pm
 t/A.t
 t/AAAA.t
 t/CNAME.t
 t/HINFO.t
+t/MINFO.t
 t/IPv4.t
 t/IPv6.t
 t/MB.t
@@ -51,6 +54,7 @@ t/MX.t
 t/NS.t
 t/NULL.t
 t/PTR.t
+t/RP.t
 t/Question.t
 t/RRfunc.t
 t/SOA.t

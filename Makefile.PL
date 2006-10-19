@@ -12,18 +12,18 @@ WriteMakefile(
     'LIBS'		=> ['-lresolv'], # e.g., '-lm'
     'depend'		=> {'ToolKit.c'	=> 'ToolKit.h xs_include/dn_expand.inc',
 			},
-    'clean'		=> { FILES	=> "*.bs *.o *~ uIxxdefs.h config.log"},
+    'clean'		=> { FILES	=> "*.bs *.o *~ localStuff.h config.log"},
 );
 
 sub MY::top_targets {
   package MY;
   my $begin = q|
-config  :: uIxxdefs.h
+config  :: localStuff.h
 	@$(NOOP)
 
 # siteconf CCname Cfile_ext OBJext EXEext "Cflags" "LDflags" "LDLOADLIBS"
 #
-uIxxdefs.h :
+localStuff.h :
 	./siteconf "$(CC)" ".c" "$(OBJ_EXT)" "$(EXE_EXT)" "$(CCFLAGS)" "$(LDFLAGS)" "$(LDLOADLIBS)"
 |;
   my $inherited = shift->SUPER::top_targets(@_);

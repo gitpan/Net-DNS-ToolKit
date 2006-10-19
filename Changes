@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.30  Thu Oct 19 09:43:36 PDT 2006
+	Added RP and MINFO types
+
 0.29  Mon Jul 24 14:07:10 PDT 2006
 	remove unused reference to NetAddr::IP in
 	Net::DNS::ToolKit::Utilities
