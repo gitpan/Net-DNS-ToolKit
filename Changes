@@ -1,5 +1,16 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.31  Wed Apr 11 11:43:23 PDT 2007
+	RR.pm ver 0.06, small documentation update
+
+	Thanks to "Clayton O'Neill" <coneill@oneill.net> for spotting this
+	one. Fixed bug in dn_comp which only seems to manifest when you pass in
+	a name that begins with a number.  Sometimes it seems that if perl has
+	evaluated the scalar in a numeric context for some reason, it's type
+	will be considered to be IV, not PV.  The patch I've attached changes
+	the check to see if it's a glob first, and if not, checks to see if it
+	can be used as a PV, instead of checking if it is already a PV.
+
 0.30  Thu Oct 19 09:43:36 PDT 2006
 	Added RP and MINFO types
 

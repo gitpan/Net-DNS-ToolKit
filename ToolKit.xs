@@ -166,11 +166,10 @@ dn_comp(buffer, offset, name,...)
 
 	name = SvRV(name);
 
-	if (SvTYPE(name) == SVt_PV ||
-	    SvTYPE(name) == SVt_PVMG)		/* normal	*/
-	    exp_dn = SvPV(name, len);
-	else if (SvTYPE(name) == SVt_PVGV)	/* debugging, skip dn_comp	*/
+	if (SvTYPE(name) == SVt_PVGV)		/* debugging, skip dn_comp	*/
 	    exp_dn = SvPV(GvSV(name), len);
+        if (SvPOK(name))                        /* normal	*/
+	    exp_dn = SvPV(name, len);
 	else					/* punt, not scalar or glob	*/
 	    XSRETURN_EMPTY;
 

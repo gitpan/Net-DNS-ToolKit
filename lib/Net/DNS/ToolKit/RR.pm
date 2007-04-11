@@ -18,7 +18,7 @@ use Net::DNS::ToolKit qw(
 use vars qw($VERSION $autoload *sub);
 require Net::DNS::ToolKit::Question;
 
-$VERSION = do { my @r = (q$Revision: 0.05 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.06 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 sub remoteload {
 #    *sub = $autoload;
@@ -271,9 +271,9 @@ Net::DNS::ToolKit::RR - Resource Record class loader
 The Question section is a special case:
 
   ($newoff,$name,type,class) = 
-	get->Question(\$buffer,$offset);
+	$get->Question(\$buffer,$offset);
   ($newoff,@dnptrs) = 
-	put->Question(\$buffer,$offset,
+	$put->Question(\$buffer,$offset,
 	$name,$type,$class,\@dnptrs);
   ($name,$typeTXT,$classTXT) =
 	$parse->Question($name,$type,$class);
