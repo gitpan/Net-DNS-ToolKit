@@ -6,7 +6,7 @@ use strict;
 
 use vars qw($VERSION @ISA @EXPORT_OK $ID);
 
-$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.04 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 use AutoLoader 'AUTOLOAD';
 

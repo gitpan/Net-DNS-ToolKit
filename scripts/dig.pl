@@ -74,7 +74,7 @@ name    is the name of the resource record that is to be looked up.
 
 my $tcp		= 0;		# default
 my $debug	= 0;		# default
-my $head	= 0;		# default
+my $headbug	= 0;		# default
 my $Type	= T_A;		# default
 my $port	= 53;		# default
 my $server	= get_ns();	# default to first ns on list
@@ -116,6 +116,7 @@ while ($_ = shift) {
     $debug = 1;
   }
   elsif ($_ =~ /^\-h/) {	# header?
+    $headbug = 1;
   }
   elsif ($_ =~ /^\-t/) {	# type?
     $Type = uc shift;		# must be next item 
@@ -155,7 +156,7 @@ my $offset = newhead(\$buffer,
 my ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
 $offset = $put->Question(\$buffer,$offset, $name,$Type,C_IN);
 
-print_head(\$buffer) if $head;		# show header if header debug
+print_head(\$buffer) if $headbug;	# show header if header debug
 print_buf(\$buffer) if $debug;		# show query if debug
 
 my $response;
@@ -255,7 +256,7 @@ if ($@) {
 sub response2text {
   my($bp,$soap) = @_;
   my $type;
-  if ($head) {
+  if ($headbug) {
     print "\n\n";
     print_head($bp);		# show header if header debug
   }

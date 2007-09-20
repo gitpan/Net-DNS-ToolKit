@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.33  Wed Sep 19 21:28:00 PDT 2007
+	correct typo in variable name in dig.pl
+
 0.32  Wed Sep 19 21:08:21 PDT 2007
 	add "print header" switch to dig.pl
 
