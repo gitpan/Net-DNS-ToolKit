@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # dig.pl
-my $version = 1.08;	# 2-21-05 Michael Robinton <michael@bizsystems.com>
+my $version = 1.09;	# 9-19-07 Michael Robinton <michael@bizsystems.com>
 
 #
 # Copyright 2003, Michael Robinton <michael@bizsystems.com>
@@ -35,6 +35,7 @@ use Net::DNS::ToolKit qw(
 );
 use Net::DNS::ToolKit::Debug qw(
 	print_buf
+	print_head
 );
 use Net::DNS::ToolKit::RR;
 
@@ -44,7 +45,7 @@ sub usage {
   print STDERR "\n",@_ if @_;
   print STDERR q|
 Syntax:
-dig.pl [@server] [+tcp] [-d] [-p port#] [-t type] name
+dig.pl [@server] [+tcp] [-d] [-h] [-p port#] [-t type] name
 
 server	is the name or IP address of the name server to query.  An IPv4
 	address can be provided in dotted-decimal notation.  When the
@@ -54,6 +55,8 @@ server	is the name or IP address of the name server to query.  An IPv4
   +tcp	only use TCP protocol
 
   -d	print the query to the console
+
+  -h	print the header to the console
 
   -p	port# is the port number that dig.pl will send its queries 
 	instead of the standard DNS port number 53.
@@ -71,6 +74,7 @@ name    is the name of the resource record that is to be looked up.
 
 my $tcp		= 0;		# default
 my $debug	= 0;		# default
+my $head	= 0;		# default
 my $Type	= T_A;		# default
 my $port	= 53;		# default
 my $server	= get_ns();	# default to first ns on list
@@ -111,6 +115,8 @@ while ($_ = shift) {
   elsif ($_ =~ /^\-d/) {	# debug?
     $debug = 1;
   }
+  elsif ($_ =~ /^\-h/) {	# header?
+  }
   elsif ($_ =~ /^\-t/) {	# type?
     $Type = uc shift;		# must be next item 
     &usage("bad type $Type") unless exists $allowed{$Type};
@@ -149,6 +155,7 @@ my $offset = newhead(\$buffer,
 my ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
 $offset = $put->Question(\$buffer,$offset, $name,$Type,C_IN);
 
+print_head(\$buffer) if $head;		# show header if header debug
 print_buf(\$buffer) if $debug;		# show query if debug
 
 my $response;
@@ -248,6 +255,10 @@ if ($@) {
 sub response2text {
   my($bp,$soap) = @_;
   my $type;
+  if ($head) {
+    print "\n\n";
+    print_head($bp);		# show header if header debug
+  }
   if ($debug) {
     print "\n\n";
     print_buf($bp);		# show answer if debug

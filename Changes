@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.32  Wed Sep 19 21:08:21 PDT 2007
+	add "print header" switch to dig.pl
+
 0.31  Wed Apr 11 11:43:23 PDT 2007
 	RR.pm ver 0.06, small documentation update
 
