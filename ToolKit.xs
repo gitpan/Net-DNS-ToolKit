@@ -1,6 +1,6 @@
 /* ToolKit.xs
  *
- * Copyright 2003 - 2005, Michael Robinton <michael@bizsystems.com>
+ * Copyright 2003 - 2007, Michael Robinton <michael@bizsystems.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 /* for size of string buffer below	*/
 #include <resolv.h>
 #include <arpa/nameser.h>
+#include <arpa/nameser_compat.h>
 #include "ToolKit.h"
 
 /* for clock	*/

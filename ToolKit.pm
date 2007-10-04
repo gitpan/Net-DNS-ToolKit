@@ -14,7 +14,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.33 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.34 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -1026,7 +1026,7 @@ dn_expand is from Michael Fuhr's Net::DNS package (DNS.pm), copyright (c)
 
 =head1 COPYRIGHT
 
-    Copyright 2003 - 2006, Michael Robinton <michael@bizsystems.com>
+    Copyright 2003 - 2007, Michael Robinton <michael@bizsystems.com>
    
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

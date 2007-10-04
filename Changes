@@ -1,5 +1,11 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.34  Thu Oct  4 09:54:14 PDT 2007
+	include <arpa/nameser_compat.h>
+	so build works on OSX
+	Thanks to Chris Turner chris@turnerhq.com for providing
+	the bug fix.
+
 0.33  Wed Sep 19 21:28:00 PDT 2007
 	correct typo in variable name in dig.pl
 
