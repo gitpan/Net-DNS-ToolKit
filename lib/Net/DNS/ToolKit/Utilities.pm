@@ -6,7 +6,7 @@ use strict;
 
 use vars qw($VERSION @ISA @EXPORT_OK $ID);
 
-$VERSION = do { my @r = (q$Revision: 0.04 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.05 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 use AutoLoader 'AUTOLOAD';
 
@@ -92,6 +92,7 @@ Net::DNS::ToolKit::Utilities - a collection of helper utilities
   ($aptr,$tptr,$auth_zone) = dns_ans(\$buffer);
   $nsptr = dns_ns(\$buffer);
   $hostname = dns_ptr(\$buffer);
+  @hosts = dns_ptr(\$buffer);
   $socket = rlook_send($IP,$timeout);
   $hostname = rlook_rcv($socket,$timeout);
 
@@ -453,41 +454,44 @@ sub dns_ns {
 
 Parse a DNS PTR request answer and return the hostname
 
-If no records are found, undef is returned
+If no records are found, undef or an empty array is returned
 
   input:	pointer to response buffer
-  returns:	host name
+  returns:	host name or array of hosts
 
 =cut
 
 sub dns_ptr {
   my $bp = shift;
-  return undef unless $$bp;
+  unless ($$bp) {
+    return wantarray ? () : undef;
+  }
   my ($off,$id,$qr,$opcode,$aa,$tc,$rd,$ra,$mbz,$ad,$cd,$rcode,
 	$qdcount,$ancount,$nscount,$arcount)
 	= gethead($bp);
 
-  return undef if
-	$tc ||
+  if (	$tc ||
 	$opcode != QUERY ||
 	$rcode != NOERROR ||
 	$qdcount != 1 ||
-	$ancount < 1;
+	$ancount < 1 ) {
+    return wantarray ? () : undef;
+  }
 
   my ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
   ($off,my($name,$type,$class)) = $get->Question($bp,$off);
-  return undef unless $class == C_IN;
+  unless ($class == C_IN) {
+    return wantarray ? () : undef;
+  }
 
-  my($ttl,$rdlength,$host);
-  while (1) {
+  my($ttl,$rdlength,$host,@hosts);
+  foreach(0..$ancount -1) {
     ($off,$name,$type,$class,$ttl,$rdlength,$host) =
 	$get->next($bp,$off);
-    last if $type == T_PTR;
-    next if $type == T_CNAME;
-    return undef;			# not a PTR or CNAME record
+    push @hosts, $host;
   }
-  ($name,$type,$class,$host) = $parse->PTR($name,$type,$class,$host);
-  return $host;
+#  ($name,$type,$class,@hosts) = $parse->PTR($name,$type,$class,@hosts);
+  return wantarray ? @hosts : $hosts[0];
 }
 
 =item * $socket = rlook_send($IP,$timeout);

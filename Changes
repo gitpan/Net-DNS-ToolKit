@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.35
+	update v0.05 of Utilities::dns_ptr to
+	return a scalar or an array of names
+
 0.34  Thu Oct  4 09:54:14 PDT 2007
 	include <arpa/nameser_compat.h>
 	so build works on OSX
