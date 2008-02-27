@@ -14,7 +14,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.35 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.36 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -642,7 +642,7 @@ sub newhead {
   $qdcount = 0 unless $qdcount;
   $ancount = 0 unless $ancount;
   $nscount = 0 unless $nscount;
-  $arcount = 0 unless $nscount;
+  $arcount = 0 unless $arcount;
   $$bp = pack("n n n n n n",$id,$flags,$qdcount,$ancount,$nscount,$arcount);
   return NS_HFIXEDSZ;
 }

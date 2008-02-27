@@ -1,6 +1,11 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
-0.35
+0.36  Wed Feb 27 11:12:58 PST 2008
+	Fixed typo in sub 'newhead' where the wrong variable
+	referenced in argument testing.
+	Thanks to Rafal Krypa for spotting and reporting that error.
+
+0.35  release date missing 
 	update v0.05 of Utilities::dns_ptr to
 	return a scalar or an array of names
 
