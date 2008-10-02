@@ -14,7 +14,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.36 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.38 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -1008,6 +1008,11 @@ I have been unable to duplicate this on any of the ix86 Linux or Sun-Sparc syste
 If you have a system that exhibits this problem and can provide a user account, I'd
 appreciate it if you would contact me so I can fix it.
 
+Update v0.38 Thu Oct  2 14:49:26 PDT 2008
+This may be an issue with sharing of the __res_state structure. The update
+uses a private __res_state structure rather than the shared one and calling
+res_ninit(*private_res). Hopefully this will fix the problem.
+
 =head1 AUTHOR
 
 Michael Robinton <michael@bizsystems.com>
@@ -1026,7 +1031,7 @@ dn_expand is from Michael Fuhr's Net::DNS package (DNS.pm), copyright (c)
 
 =head1 COPYRIGHT
 
-    Copyright 2003 - 2007, Michael Robinton <michael@bizsystems.com>
+    Copyright 2003 - 2008, Michael Robinton <michael@bizsystems.com>
    
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

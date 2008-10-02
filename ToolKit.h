@@ -52,3 +52,10 @@
 #ifndef NS_IN6ADDRSZ
 #define NS_IN6ADDRSZ	16
 #endif
+
+#ifndef MAXDNAME
+#  ifndef NS_MAXDNAME
+#  define NS_MAXDNAME 1025
+#  endif
+#define MAXDNAME NS_MAXDNAME
+#endif

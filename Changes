@@ -1,5 +1,12 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.38  Thu Oct  2 14:49:26 PDT 2008
+	update ToolKit.xs get_ns to be thread safe
+
+0.37  Sat Sep 27 11:16:29 PDT 2008
+	Include definition of MAXDNAME missing in osx
+	Thanks to schneecrash@gmail.com for pointing this out
+
 0.36  Wed Feb 27 11:12:58 PST 2008
 	Fixed typo in sub 'newhead' where the wrong variable
 	referenced in argument testing.

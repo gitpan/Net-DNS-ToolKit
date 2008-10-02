@@ -36,6 +36,15 @@
 /* for clock	*/
 #include <time.h>
 
+/* for resolver	*/
+struct __res_state res;
+
+#ifdef RES_XINIT
+#define RES_Init RES_INIT | RES_XINIT
+#else
+#define RES_Init RES_INIT
+#endif
+
 /* from	/usr/include/arpa/nameser_compat.h, modified a little	*/
 typedef struct {
 	unsigned	id :16;	 /* query identification number */
@@ -622,7 +631,8 @@ get_ns()
 	int i, nscount;
 	u_char * netptr;
     PPCODE:
-	if (res_init() != 0) {			/* punt if we can not initialize resolver interface */
+	res.options &= ~ RES_Init;
+	if (res_ninit(&res) != 0) {			/* punt if we can not initialize resolver interface */
 	bail:
 	    if (GIMME_V != G_ARRAY)
 		XSRETURN_UNDEF;
@@ -630,7 +640,7 @@ get_ns()
 		XSRETURN_EMPTY;
 	}
 
-	if ((nscount = _res.nscount) < 1)	/* punt, no nameservers	*/
+	if ((nscount = res.nscount) < 1)	/* punt, no nameservers	*/
 	    goto bail;
 
 	if (GIMME_V != G_ARRAY)
