@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.39  Mon Oct  6 13:16:02 PDT 2008
+	clean up windows build bug
+
 0.38  Thu Oct  2 14:49:26 PDT 2008
 	update ToolKit.xs get_ns to be thread safe
 

@@ -1,8 +1,10 @@
 use ExtUtils::MakeMaker;
 use Config;
+use Cwd;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 
+my $pwd = getcwd();
 WriteMakefile(
     'NAME'		=> 'Net::DNS::ToolKit',
     'VERSION_FROM'	=> 'ToolKit.pm', # finds $VERSION
@@ -24,7 +26,7 @@ config  :: localStuff.h
 # siteconf CCname Cfile_ext OBJext EXEext "Cflags" "LDflags" "LDLOADLIBS"
 #
 localStuff.h :
-	./siteconf "$(CC)" ".c" "$(OBJ_EXT)" "$(EXE_EXT)" "$(CCFLAGS)" "$(LDFLAGS)" "$(LDLOADLIBS)"
+	|. $pwd .q|/siteconf "$(CC)" ".c" "$(OBJ_EXT)" "$(EXE_EXT)" "$(CCFLAGS)" "$(LDFLAGS)" "$(LDLOADLIBS)"
 |;
   my $inherited = shift->SUPER::top_targets(@_);
   $inherited =~ s/(pure_all\s+::.+)/$1 README/;
