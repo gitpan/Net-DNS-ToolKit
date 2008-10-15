@@ -2,40 +2,27 @@
 # `make test'. After `make install' it should work as `perl test.pl'
 
 ######################### We start with some black magic to print on failure.
-# Change 1..1 below to 1..last_test_to_print .
-# (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..2\n"; }
+use Test::More qw(no_plan);
+
+BEGIN { use_ok('Net::DNS::ToolKit', qw(get_ns inet_ntoa)); }
+my $loaded = 1;
 END {print "not ok 1\n" unless $loaded;}
 
-use Net::DNS::ToolKit qw(
-	get_ns
-	inet_ntoa
-);
-
-$loaded = 1;
-print "ok 1\n";
-######################### End of black magic.
-
-# Insert your test code below (better if it prints "ok 13"
-# (correspondingly "not ok 13") depending on the success of chunk 13
-# of the test code):
-
-$test = 2;
-
-sub ok {
-  print "ok $test\n";
-  ++$test;
-}
-
 my @netaddrs = get_ns();
-
+my $ip;
 my $output = "\n\tlocal nameserver(s)\n";
 if (@netaddrs) {
-  foreach(@netaddrs) {
-    $output .= "\t".inet_ntoa($_)."\n";
+  foreach (@netaddrs) {
+    ok( $ip = inet_ntoa($_), "NS IP array = $ip");
+    $output .= "\t$ip\n";
   }
   print STDERR $output;
+
+  $ip = get_ns();
+  ok( $ip = inet_ntoa($ip), "NS IP scalar = $ip");
+
+
 } else {
   select STDERR; $| = 1;
   select STDOUT;
@@ -43,15 +30,14 @@ if (@netaddrs) {
 The resolver library did not return any nameservers. This could
 mean that your system is not properly configured, or more likely
 that the ToolKit.pm interface to the "C" resolver library is not
-working properly. 
+working properly.
 
 This latter condition has been reported with versions of perl 5.8x
 on some systems, however the author has not been able to duplicate
 it on in house hosts. If you have a system that exhibits this problem
-and can provide a shell account for debug purposes, please contact 
+and can provide a shell account for debug purposes, please contact
 the author, Michael Robinton <michael@bizsystems.com> .
 |;
   sleep 1;
-  print "\nnot ";
+  ok( 0, '-' );
 }
-print "ok 2\n";

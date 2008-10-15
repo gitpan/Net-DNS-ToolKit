@@ -61,14 +61,17 @@ t/SOA.t
 t/TXT.t
 t/alt_methods.t
 t/collapse.t
+t/default_ns.t
 t/dn_comp_expand.t
 t/get_ns.t
 t/get1632.t
 t/get1char.t
 t/getflags.t
+t/get_path.t
 t/gettimeofday.t
 t/inet_xtoy.t
 t/ipv6_xtoy.t
+t/lchance.t
 t/newhead_gethead.t
 t/next_new.t
 t/next_not.t

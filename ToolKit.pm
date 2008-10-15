@@ -14,7 +14,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.39 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.40 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -883,6 +883,29 @@ microsecond but also has a range of years.
   input:    none
   returns:  seconds since epoch,
 	    microseconds (of current sec)
+
+=cut
+
+sub get_ns {
+  local *Rconf;
+  my $path = get_path();
+  my @ns;
+  if ($path && open(Rconf,$path)) {
+    my @lines = (<Rconf>);		# slurp lines
+    close Rconf;
+    foreach(@lines) {
+      next if $_ =~ /^\s*#/;
+      if ($_ =~ /nameserver\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/ &&
+		($_ = inet_aton($1))) {
+	push @ns, $_;
+      }
+    }
+  }
+  unless (@ns || (@ns = lastchance())) {
+    goto &get_default;
+  }
+  return wantarray ? @ns : $ns[0];
+}
 
 =back
 

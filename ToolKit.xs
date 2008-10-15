@@ -28,6 +28,7 @@
 #include "u_intxx.h"
 
 /* for size of string buffer below	*/
+#include <netdb.h>
 #include <resolv.h>
 #include <arpa/nameser.h>
 #include <arpa/nameser_compat.h>
@@ -92,6 +93,23 @@ struct in_addr i2p;
 
 struct timeval tv;
 
+#ifdef lastchanceTEST
+#ifndef NO_RESOLV_CONF
+#define NO_RESOLV_CONF
+#endif
+#endif
+
+struct __res_state my_res_state;
+struct sockaddr_in mysa;
+
+#ifdef _PATH_RESCONF
+char *path = _PATH_RESCONF;
+size_t pathz = sizeof(_PATH_RESCONF);
+#else
+char *path = NULL;
+size_t pathz = 0;
+#endif
+
 /* ****************************	*
  *	return int's, long's	*
  *	from char string	*
@@ -131,6 +149,34 @@ ns_ptr(int i)
 {
   i2p.s_addr = _res.nsaddr_list[i].sin_addr.s_addr;
   return((u_char *)&i2p.s_addr);
+}
+
+void
+mysin()
+{
+#ifdef USELOOPBACK
+	mysa.sin_addr = inet_makeaddr(IN_LOOPBACKNET, 1);
+#else
+	mysa.sin_addr.s_addr = INADDR_ANY;
+#endif
+}
+
+int
+lchance()
+{
+#ifndef NO_RESOLV_CONF
+  return 0;
+#else
+#ifdef lastchanceTEST
+  my_res_state.options = RES_INIT;
+  if (res_ninit(&my_res_state) != 0)		/* punt if we can not initialize resolver interface */
+    return 0;
+  return my_res_state.nscount;
+#else
+  memset(&my_res_state,0,sizeof(my_res_state));
+  return get_nameservers(&my_res_state);
+#endif
+#endif
 }
 
 MODULE = Net::DNS::ToolKit	PACKAGE = Net::DNS::ToolKit
@@ -626,33 +672,6 @@ putIPv6(buffer,off,ipv6addr)
 	RETVAL
 
 void
-get_ns()
-    PREINIT:
-	int i, nscount;
-	u_char * netptr;
-    PPCODE:
-	res.options &= ~ RES_Init;
-	if (res_ninit(&res) != 0) {			/* punt if we can not initialize resolver interface */
-	bail:
-	    if (GIMME_V != G_ARRAY)
-		XSRETURN_UNDEF;
-	    else
-		XSRETURN_EMPTY;
-	}
-
-	if ((nscount = res.nscount) < 1)	/* punt, no nameservers	*/
-	    goto bail;
-
-	if (GIMME_V != G_ARRAY)
-	    nscount = 1;
-
-	for(i=0;i<nscount;i++) {
-	    netptr = ns_ptr(i);
-	    XPUSHs(sv_2mortal(newSVpvn(netptr, NS_INADDRSZ)));
-	}
-	XSRETURN(nscount);
-
-void
 gettimeofday()
     PREINIT:
 	SV * tmp;				/* older perl does not know about newSVuv */
@@ -673,3 +692,43 @@ gettimeofday()
 	    XSRETURN(2);
 	}
 	XSRETURN(1);
+
+void
+get_default()
+    PPCODE:
+	mysin();
+	XPUSHs(sv_2mortal(newSVpvn((u_char *)&mysa.sin_addr, NS_INADDRSZ)));
+	XSRETURN(1);
+
+void
+get_path()
+    PREINIT:
+	SV * out;
+    PPCODE:
+	if (path == NULL)
+	    XSRETURN_UNDEF;
+	out = sv_newmortal();
+	sv_setpvn(out, path, (STRLEN)pathz);    
+	XPUSHs(out);
+	XSRETURN(1);
+
+void
+lastchance()
+    PREINIT:
+	int i, nscount;
+	u_char * netptr;
+    PPCODE:
+	if ((nscount = lchance()) < 1) {
+	    if (GIMME_V != G_ARRAY)
+		XSRETURN_UNDEF;
+	    else
+		XSRETURN_EMPTY;
+	}
+	if (GIMME_V != G_ARRAY)
+	    nscount = 1;
+
+	for(i=0;i<nscount;i++) {
+	    netptr = ns_ptr(i); 
+	    XPUSHs(sv_2mortal(newSVpvn(netptr, NS_INADDRSZ)));
+	}
+	XSRETURN(nscount);

@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.40  Wed Oct 15 13:30:22 PDT 2008
+	revised get_ns and replaced it with a cluster of XS and perl
+	routines to circumvent thread issues in res_init and res_ninit
+
 0.39  Mon Oct  6 13:16:02 PDT 2008
 	clean up windows build bug
 
