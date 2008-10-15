@@ -7,7 +7,7 @@ use Cwd;
 WriteMakefile(
     'NAME'		=> 'Net::DNS::ToolKit',
     'VERSION_FROM'	=> 'ToolKit.pm', # finds $VERSION
-    'PREREQ_PM'		=> {	Net::DNS::Codes	=> 0.06,
+    'PREREQ_PM'		=> {	Net::DNS::Codes	=> 0.09,
 				NetAddr::IP::Util => 0.11
 			},
     'LIBS'		=> ['-lresolv'], # e.g., '-lm'

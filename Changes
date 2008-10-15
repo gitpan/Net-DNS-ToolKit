@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.41  Wed Oct 15 14:19:29 PDT 2008
+	require Net::DNS::Codes version 0.09 or higher
+
 0.40  Wed Oct 15 13:30:22 PDT 2008
 	revised get_ns and replaced it with a cluster of XS and perl
 	routines to circumvent thread issues in res_init and res_ninit
