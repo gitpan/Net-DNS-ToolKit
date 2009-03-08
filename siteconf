@@ -1570,7 +1570,9 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 			cat >>localStuff.h <<\_ACEOF
+#ifndef HAVE_UINTXX_T
 #define HAVE_UINTXX_T 2
+#endif
 _ACEOF
 
 			echo "$as_me:$LINENO: result: yes" >&5

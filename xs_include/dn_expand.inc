@@ -1,5 +1,5 @@
  #
- # Copyright (c) 1997-2002 Michael Fuhr.  All rights reserved.  This
+ # Copyright (c) 1997-2009 Michael Fuhr.  All rights reserved.  This
  # program is free software; you can redistribute it and/or modify it
  # under the same terms as Perl itself.
  #
@@ -12,7 +12,7 @@
  #       mike@fuhr.org 
  #
  # Modified ever so slightly and those changes are
- # Copyright 2003 Michael Robinton. All rights reserved.  This
+ # Copyright 2003-2009 Michael Robinton. All rights reserved.  This
  # program is free software; you can redistribute it and/or modify it
  # under the same terms as Perl itself.
  #
@@ -36,18 +36,18 @@
 void
 dn_expand(buffer, offset) 
 	SV * buffer
-	unsigned int offset
+	int offset
     PROTOTYPE: $$		
     PPCODE:
 	STRLEN len;
 	u_char * buf;
-	u_char name[MAXDNAME];
-	unsigned int size;
+	char name[MAXDNAME];
+	int size;
 
 	if (SvROK(buffer)) 
 	    buffer = SvRV(buffer);
 
-	buf = SvPV(buffer, len);
+	buf = (u_char *)SvPV(buffer, len);
 	size = dn_expand(buf, buf+len, buf+offset, &name[0], MAXDNAME);
 
 	if (size < 0) {

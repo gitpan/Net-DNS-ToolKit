@@ -8,7 +8,7 @@ WriteMakefile(
     'NAME'		=> 'Net::DNS::ToolKit',
     'VERSION_FROM'	=> 'ToolKit.pm', # finds $VERSION
     'PREREQ_PM'		=> {	Net::DNS::Codes	=> 0.09,
-				NetAddr::IP::Util => 0.11
+				NetAddr::IP::Util => 1.30
 			},
     'LIBS'		=> ['-lresolv'], # e.g., '-lm'
     'depend'		=> {'ToolKit.c'	=> 'ToolKit.h xs_include/dn_expand.inc',

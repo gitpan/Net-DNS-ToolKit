@@ -117,7 +117,7 @@ size_t pathz = 0;
  */
 
 u_short
-gint16(char * cp)
+gint16(u_char * cp)
 {
   u_short i;
   NS_GET16(i,cp);
@@ -125,7 +125,7 @@ gint16(char * cp)
 }
 
 u_int32_t
-gint32(char * cp)
+gint32(u_char * cp)
 {
   u_int32_t i;
   NS_GET32(i,cp);
@@ -133,13 +133,13 @@ gint32(char * cp)
 }
 
 void
-gput16(char * cp, unsigned int i)
+gput16(u_char * cp, unsigned int i)
 {
   NS_PUT16(i,cp);
 }
 
 void
-gput32(char * cp, u_int32_t v)
+gput32(u_char * cp, u_int32_t v)
 {
   NS_PUT32(v,cp);
 }
@@ -204,7 +204,7 @@ INCLUDE: xs_include/dn_expand.inc
 void
 dn_comp(buffer, offset, name,...)
 	SV * buffer
-	unsigned int offset
+	int offset
 	SV * name
     PROTOTYPE: $$$;@ 
     PREINIT:
@@ -223,9 +223,9 @@ dn_comp(buffer, offset, name,...)
 	name = SvRV(name);
 
 	if (SvTYPE(name) == SVt_PVGV)		/* debugging, skip dn_comp	*/
-	    exp_dn = SvPV(GvSV(name), len);
+	    exp_dn = (u_char *)SvPV(GvSV(name), len);
         if (SvPOK(name))                        /* normal	*/
-	    exp_dn = SvPV(name, len);
+	    exp_dn = (u_char *)SvPV(name, len);
 	else					/* punt, not scalar or glob	*/
 	    XSRETURN_EMPTY;
 
@@ -240,7 +240,7 @@ dn_comp(buffer, offset, name,...)
 	    XSRETURN_EMPTY;
 
 		# add some space at the end of the string, get pointer
-	msg = SvGROW(buffer, (STRLEN)(size + MAXDNAME));
+	msg = (u_char *)SvGROW(buffer, (STRLEN)(size + MAXDNAME));
 	comp_dn = msg + offset;
 
 		# setup dnptrs from outside or init them to zero
@@ -274,7 +274,7 @@ dn_comp(buffer, offset, name,...)
 
 	if (SvTYPE(name) == SVt_PVGV)
 	    dnptrs[0] = NULL;			/* do not compress	*/
-	len = dn_comp(exp_dn,comp_dn,MAXDNAME,dnptrs,lastdnptr);
+	len = dn_comp((char *)exp_dn,comp_dn,MAXDNAME,dnptrs,lastdnptr);
 
 		# set the string length to the new real length	
 	SvCUR_set(buffer, (I32)(size + len));
@@ -328,7 +328,7 @@ parse_char(ch)
 	unsigned char ch
     PROTOTYPE: $
     PREINIT:
-	char bmask[] = {128,64,32,16,8,4,2,1};
+	u_char bmask[] = {128,64,32,16,8,4,2,1};
 	unsigned int i, hi, lo, tens[] = {1000,100,10,1, 1000,100,10,1};
 	char out[15];
     PPCODE:
@@ -370,7 +370,7 @@ get1char(buffer,off)
 	if (!SvROK(buffer))	/* not a pointer	*/
 	    XSRETURN_UNDEF;
 
-	cp = (SvPV(SvRV(buffer),size) + off);
+	cp = (u_char *)(SvPV(SvRV(buffer),size) + off);
 
 	if (size <= off)	/* offset beyond end	*/
 	    XSRETURN_UNDEF;
@@ -393,7 +393,7 @@ getstring(buffer,off,len)
 	if (!SvROK(buffer))	/* not a pointer	*/
 	    XSRETURN_EMPTY;
 
-	cp = (SvPV(SvRV(buffer),size) + off);
+	cp = (u_char *)(SvPV(SvRV(buffer),size) + off);
 
 	if (off + len > size)	/* offset beyond end	*/
 	    XSRETURN_EMPTY;
@@ -431,7 +431,7 @@ putstring(buffer,off,string)
 	if (off > size)		/* not a valid offset	*/
 	    XSRETURN_UNDEF;
 
-	cp = SvPV(SvRV(string),len);
+	cp = (u_char *)SvPV(SvRV(string),len);
 
 	if (off + len > MAXDNAME)	/* too big to add	*/
 	    XSRETURN_UNDEF;
@@ -439,7 +439,7 @@ putstring(buffer,off,string)
 	if (off < size)
 	    SvCUR_set(buf,off);
 
-	sv_catpvn(buf, cp, len);
+	sv_catpvn(buf, (char *)cp, len);
 
 	SvCUR_set(buf, (I32)(off + len));
 	RETVAL = off + len;
@@ -530,7 +530,7 @@ put16(buffer,off,val_long)
 	}
 
 	if (off + ns_size > size)			/* add space at end if needed	*/
-	    sv_catpvn(buffer,blank,ns_size);
+	    sv_catpvn(buffer,(char *)blank,ns_size);
 
 	cp = (u_char *)(SvPV(buffer,size) + off);
 
@@ -598,7 +598,7 @@ putIPv4(buffer,off,netaddr)
 	    XSRETURN_UNDEF;
 
 	if (off + NS_INADDRSZ > size)
-	    sv_catpvn(buffer,blank,NS_INADDRSZ);	/* extend buffer if needed	*/
+	    sv_catpvn(buffer,(char *)blank,NS_INADDRSZ);	/* extend buffer if needed	*/
 
 	cp = (u_char *)(SvPV(buffer, discard) + size);
 
@@ -661,7 +661,7 @@ putIPv6(buffer,off,ipv6addr)
 	    XSRETURN_UNDEF;
 
 	if (off + NS_IN6ADDRSZ > size)
-	    sv_catpvn(buffer,blank,NS_IN6ADDRSZ);	/* extend buffer if needed	*/
+	    sv_catpvn(buffer,(char *)blank,NS_IN6ADDRSZ);	/* extend buffer if needed	*/
 
 	cp = (u_char *)(SvPV(buffer, discard) + size);
 
@@ -697,7 +697,7 @@ void
 get_default()
     PPCODE:
 	mysin();
-	XPUSHs(sv_2mortal(newSVpvn((u_char *)&mysa.sin_addr, NS_INADDRSZ)));
+	XPUSHs(sv_2mortal(newSVpvn((char *)&mysa.sin_addr, NS_INADDRSZ)));
 	XSRETURN(1);
 
 void
@@ -729,6 +729,6 @@ lastchance()
 
 	for(i=0;i<nscount;i++) {
 	    netptr = ns_ptr(i); 
-	    XPUSHs(sv_2mortal(newSVpvn(netptr, NS_INADDRSZ)));
+	    XPUSHs(sv_2mortal(newSVpvn((char *)netptr, NS_INADDRSZ)));
 	}
 	XSRETURN(nscount);

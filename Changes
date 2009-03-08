@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.42  Sat Mar  7 17:38:03 PST 2009
+	edits to xs_include/dn_expand.inc and ToolKit.xs
+	to clean up char/u_char mismatches that "cc" cares about
+
 0.41  Wed Oct 15 14:19:29 PDT 2008
 	require Net::DNS::Codes version 0.09 or higher
 
