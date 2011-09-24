@@ -3,6 +3,7 @@ Changes
 GPL
 INSTALL
 MANIFEST
+MANIFEST.SKIP
 README
 Makefile.PL
 ToolKit.h
@@ -81,6 +82,7 @@ t/parse_char.t
 t/put1632.t
 t/put1char.t
 t/put_counts.t
+t/puthead.t
 t/sec2time.t
 t/ss_id.t
 t/string.t

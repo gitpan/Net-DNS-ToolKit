@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # dig.pl
-my $version = 1.09;	# 9-19-07 Michael Robinton <michael@bizsystems.com>
+my $version = sprintf("%0.2f",1.10);	# 9-23-11 Michael Robinton <michael@bizsystems.com>
 
 #
 # Copyright 2003, Michael Robinton <michael@bizsystems.com>
@@ -79,7 +79,7 @@ my $Type	= T_A;		# default
 my $port	= 53;		# default
 my $server	= get_ns();	# default to first ns on list
 my $name	= '';
-my $server	= ($server)
+$server	= ($server)
 	? inet_ntoa($server)
 	: '127.0.0.1';
 my $sname = $server;
@@ -108,7 +108,7 @@ while ($_ = shift) {
   if ($_ =~ /^@(.+)/) {			# new server
     $sname = $1;
     $server = (gethostbyname($sname))[4]; # use first address
-    &usage("could not find server $name")
+    &usage("could not find server $sname")
 	unless $server;
     $server = inet_ntoa($server);
   }
@@ -218,7 +218,7 @@ eval {
       $soaCount = 2 unless $Type == T_AXFR;
       alarm $timeout;
       if (sysread $socket, $response, 2) {
-	my $rcvdtot = 0;;
+	my $rcvdtot = 0;
 	my($rcvd,$buf);
         $msglen = get16(\$response,0);
 	$response = '';
@@ -288,7 +288,7 @@ sub response2text {
 |;; Got answer.
 ;; ->>HEADER<<- opcode: $opcode, status: $rcode, id: $id
 ;; flags: $flags; QUERY: $qdcount, ANSWER: $ancount, AUTHORITY: $nscount, ADDITIONAL: $arcount
-| unless $soap;
+| unless $Type == T_AXFR;
 
   print q|
 ;; QUESTION SECTION:
@@ -299,7 +299,7 @@ sub response2text {
     ($name,$type,$class) = $parse->Question($name,$type,$class);
     $type = strip($type);
     $class = strip($class);
-    print ";$name\t\t$class\t$type\n" unless $soap;
+    print ";$name\t\t$class\t$type\n" unless $Type == T_AXFR;
   }
 
   print q|
@@ -309,12 +309,12 @@ sub response2text {
 
   print q|
 ;; AUTHORITY SECTION:
-| unless $Type == T_AXFR;;
+| unless $Type == T_AXFR;
   $newoff = nextsect($bp,$newoff,$nscount,$soap);
   
   print q|
 ;; ADDITIONAL SECTION:
-| unless $Type == T_AXFR;;
+| unless $Type == T_AXFR;
   $newoff = nextsect($bp,$newoff,$arcount,$soap);
 
 # end timer

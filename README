@@ -22,6 +22,7 @@ SYNOPSIS
             gethead
             newhead
             getflags
+            putflags
             get_qdcount
             get_ancount
             get_nscount
@@ -50,6 +51,7 @@ SYNOPSIS
       $newoff = put16(\$buffer,$offset,$int);
       $newoff = put32(\$buffer,$offset,$long);
       $flags = getflags(\$buffer);
+      true = putflags(\$buffer,$flags);
       $int = get_qdcount(\$buffer);
       $int = get_ancount(\$buffer);
       $int = get_nscount(\$buffer);
@@ -116,6 +118,7 @@ DESCRIPTION
       $newoff       = putstring(...
       $newoff       = newhead(...
       $flags        = getflags(...
+      true          = putflags(...
       $int          = get_qdcount(...
       $int          = get_ancount(...
       $int          = get_nscount(...
@@ -201,6 +204,13 @@ DESCRIPTION
 
           input:        pointer to buffer,
           returns:      flag bits
+
+    * putflags(\$buffer,$flags);
+        Put flags bits back in header
+
+          input:        pointer to buffer,
+                        flags bits
+          returns:      n/a
 
     * $int = get_qdcount(\$buffer);
         Get the contents of the qdcount.
@@ -639,9 +649,9 @@ EXPORT
 EXPORT_OK
     get1char get16 get32 put1char put16 put32 getIPv4 putIPv4 getIPv6
     putIPv6 getstring putstring dn_comp dn_expand parse_char gethead newhead
-    getflags get_qdcount get_ancount get_nscount get_arcount put_qdcount
-    put_ancount put_nscount put_arcount inet_aton inet_ntoa ipv6_aton
-    ipv6_n2x ipv6_n2d sec2time ttlAlpha2Num collapse strip get_ns
+    getflags putflags get_qdcount get_ancount get_nscount get_arcount
+    put_qdcount put_ancount put_nscount put_arcount inet_aton inet_ntoa
+    ipv6_aton ipv6_n2x ipv6_n2d sec2time ttlAlpha2Num collapse strip get_ns
     gettimeofday
 
 BUGS

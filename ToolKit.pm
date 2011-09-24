@@ -14,7 +14,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.42 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.43 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -35,6 +35,7 @@ $VERSION = do { my @r = (q$Revision: 0.42 $ =~ /\d+/g); sprintf "%d."."%02d" x $
 	gethead
 	newhead
 	getflags
+	putflags
 	get_qdcount
 	get_ancount
 	get_nscount
@@ -134,6 +135,7 @@ Net::DNS::ToolKit - tools for working with DNS packets
 	gethead
 	newhead
 	getflags
+	putflags
 	get_qdcount
 	get_ancount
 	get_nscount
@@ -162,6 +164,7 @@ Net::DNS::ToolKit - tools for working with DNS packets
   $newoff = put16(\$buffer,$offset,$int);
   $newoff = put32(\$buffer,$offset,$long);
   $flags = getflags(\$buffer);
+  true = putflags(\$buffer,$flags);
   $int = get_qdcount(\$buffer);
   $int = get_ancount(\$buffer);
   $int = get_nscount(\$buffer);
@@ -230,6 +233,7 @@ These functions return only a value or an offset.
   $newoff	= putstring(...
   $newoff	= newhead(...
   $flags	= getflags(...
+  true		= putflags(...
   $int		= get_qdcount(...
   $int		= get_ancount(...
   $int		= get_nscount(...
@@ -330,6 +334,22 @@ sub getflags {
   my $bp = shift;
   @_ = ($bp,2);
   goto &get16;
+}
+
+=item * putflags(\$buffer,$flags);
+
+Put flags bits back in header
+
+  input:	pointer to buffer,
+		flags bits
+  returns:	n/a
+
+=cut
+
+sub putflags {
+  my($bp,$flags) = @_;
+  @_ = ($bp,2,$flags);
+  goto &put16;
 }
 
 =item * $int = get_qdcount(\$buffer);
@@ -998,6 +1018,7 @@ parse_char
 gethead
 newhead
 getflags
+putflags
 get_qdcount
 get_ancount
 get_nscount
