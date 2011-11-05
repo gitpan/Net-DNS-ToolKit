@@ -5,7 +5,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..20\n"; }
+BEGIN { $| = 1; print "1..1\n"; }
 END {print "not ok 1\n" unless $loaded;}
 
 use Net::DNS::Codes qw(:all );
@@ -27,6 +27,13 @@ use Net::DNS::ToolKit::RR;
 $loaded = 1;
 print "ok 1\n";
 ######################### End of black magic.
+
+__END__
+
+We're just going to let this old code hang around. 
+Obsoleted in v0.07 of RR.pm
+
+
 
 # Insert your test code below (better if it prints "ok 13"
 # (correspondingly "not ok 13") depending on the success of chunk 13

@@ -1,5 +1,15 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.44  Sat Nov  5 14:02:42 PDT 2011
+	add support for 'unknown RR's' per RFC 3597
+	add support for 
+		AFSDB
+		ISDN
+		MD
+		MF
+		RT
+		X25
+
 0.43  Fri Sep 23 23:08:24 PDT 2011
 	add test for OS "windows" and exit 0
 

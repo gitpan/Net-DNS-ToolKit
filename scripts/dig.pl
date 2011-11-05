@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # dig.pl
-my $version = sprintf("%0.2f",1.10);	# 9-23-11 Michael Robinton <michael@bizsystems.com>
+my $version = sprintf("%0.2f",1.11);	# 10-4-11 Michael Robinton <michael@bizsystems.com>
 
 #
 # Copyright 2003, Michael Robinton <michael@bizsystems.com>
@@ -213,11 +213,12 @@ eval {
 
     open(T,'>./tmpt.tmp') if $DEBUG2FILE;
 
+    my $continue = 1;
     my $soaCount = 0;
     while ($soaCount < 2) {
       $soaCount = 2 unless $Type == T_AXFR;
       alarm $timeout;
-      if (sysread $socket, $response, 2) {
+      if ($continue && sysread $socket, $response, 2) {
 	my $rcvdtot = 0;
 	my($rcvd,$buf);
         $msglen = get16(\$response,0);
@@ -233,7 +234,7 @@ eval {
 	alarm 0;
 
 	syswrite(T,$response,$msglen) if $DEBUG2FILE;
-        response2text(\$response,\$soaCount);
+        $continue = response2text(\$response,\$soaCount);
       } else {
         print "; Transfer failed.\n";
 	alarm 0;
@@ -280,10 +281,13 @@ sub response2text {
   $flags .= 'ad ' if $ad;
   $flags .= 'cd ' if $cd;
   chop $flags;
+
+  print $head;
+  return 0 unless $rcode == &NOERROR;	# flag failures for AXFR
+
   $opcode = OpcodeTxt->{$opcode};
   $rcode = RcodeTxt->{$rcode};
 
-  print $head;
   print qq
 |;; Got answer.
 ;; ->>HEADER<<- opcode: $opcode, status: $rcode, id: $id

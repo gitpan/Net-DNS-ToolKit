@@ -1,28 +1,34 @@
-package Net::DNS::ToolKit::RR::PTR;
+package Net::DNS::ToolKit::RR::X25;
 
 use strict;
 #use warnings;
+#use diagnostics;
 
+use Net::DNS::ToolKit qw(
+	get16
+	put16
+	get1char
+	put1char
+	dn_comp
+	dn_expand
+	putstring
+	getstring
+);
+use Net::DNS::Codes qw(:constants);
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
-
-require Net::DNS::ToolKit::RR::NS;       
-
-*get = \&Net::DNS::ToolKit::RR::NS::get;  
-*put = \&Net::DNS::ToolKit::RR::NS::put;  
-*parse = \&Net::DNS::ToolKit::RR::NS::parse;  
+$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 =head1 NAME
 
-Net::DNS::ToolKit::RR::PTR - Resource Record Handler
+Net::DNS::ToolKit::RR::X25 - Resource Record Handler
 
 =head1 SYNOPSIS
 
-  DO NOT use Net::DNS::ToolKit::RR::PTR
-  DO NOT require Net::DNS::ToolKit::RR::PTR
+  DO NOT use Net::DNS::ToolKit::RR::X25
+  DO NOT require Net::DNS::ToolKit::RR::X25
 
-  Net::DNS::ToolKit::RR::PTR is autoloaded by 
+  Net::DNS::ToolKit::RR::X25 is autoloaded by 
   class Net::DNS::ToolKit::RR and its methods
   are instantiated in a 'special' manner.
 
@@ -30,22 +36,22 @@ Net::DNS::ToolKit::RR::PTR - Resource Record Handler
   ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
 
   ($newoff,$name,$type,$class,$ttl,$rdlength,
-        $ptrdname) = $get->PTR(\$buffer,$offset);
+        $textdata) = $get->X25(\$buffer,$offset);
 
-  Note: the $get->PTR method is normally called
+  Note: the $get->X25 method is normally called
   via:  @stuff = $get->next(\$buffer,$offset);
 
-  ($newoff,@dnptrs)=$put->PTR(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$ptrdname);
+  ($newoff,@dnptrs)=$put->X25(\$buffer,$offset,\@dnptrs,
+	$name,$type,$class,$ttl,$rdlength,$textdata);
 
-  $name,$TYPE,$CLASS,$TTL,$rdlength,$IPaddr) 
-    = $parse->XYZ($name,$type,$class,$ttl,$rdlength,
-        $ptrdname);
+  $NAME,$TYPE,$CLASS,$TTL,$rdlength,$textdata) 
+    = $parse->X25($name,$type,$class,$ttl,$rdlength,
+        $textdata);
 
 =head1 DESCRIPTION
 
-B<Net::DNS::ToolKit::RR:PTR> appends an PTR resource record to a DNS packet under
-construction, recovers an PTR resource record from a packet being decoded, and 
+B<Net::DNS::ToolKit::RR:X25> appends an X25 resource record to a DNS packet under
+construction, recovers an X25 resource record from a packet being decoded, and 
 converts the numeric/binary portions of the resource record to human
 readable form.
 
@@ -94,26 +100,21 @@ readable form.
 	resource.  The format of this information varies
 	according to the TYPE and CLASS of the resource record.
 
-    3.3.12. PTR RDATA format
+    RFC 1183 - X25 RDATA format
 
     +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-    /                   PTRDNAME                    /
+    /                 PSDN ADDRESS                  /
     +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
 
     where:
 
-    PTRDNAME A <domain-name> which points to some location 
-	in the domain name space.
-
-PTR records cause no additional section processing.  These RRs are used
-in special domains to point to some other location in the domain space.
-These records are simple data, and don't imply any special processing
-similar to that performed by CNAME, which identifies aliases.  See the
-description of the IN-ADDR.ARPA domain for an example.
+    PSDN ADDRESS  A character-string which identifies the PSDN
+	(Public Switched Data Network) address in the X.121
+	numbering plan associated with the owner.
 
 =over 4
 
-=item * @stuff = $get->PTR(\$buffer,$offset);
+=item * @stuff = $get->X25(\$buffer,$offset);
 
   Get the contents of the resource record.
 
@@ -121,27 +122,42 @@ description of the IN-ADDR.ARPA domain for an example.
 
   where: @stuff = (
   $newoff $name,$type,$class,$ttl,$rdlength,
-  $ptrdname );
+  $textdata );
 
-All except the last item, B<$ptrdname>, is provided by
+All except the last item, B<$textdata>, is provided by
 the class loader, B<Net::DNS::ToolKit::RR>. The code in this method knows
-how to retrieve B<$ptrdname>.
+how to retrieve B<$textdata>.
 
   input:        pointer to buffer,
                 offset into buffer
   returns:      offset to next resource,
                 @common RR elements,
-		PTR Domain Name
+		PSDN string
 
-=item * ($newoff,@dnptrs)=$put->PTR(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$ptrdname);
+=cut
 
-Append an PTR record to $buffer.
+sub get {
+  my($self,$bp,$offset) = @_;
+  (my $rdend,$offset) = get16($bp,$offset);	# get rdlength
+  $rdend += $offset;	# end pointer
+  my @tdata;
+  while($offset < $rdend) {
+    my $len = get1char($bp,$offset);
+    (my $string,$offset) = getstring($bp,$offset+1,$len);
+    push @tdata, $string;
+  }
+  return($offset,@tdata);
+}
+
+=item * ($newoff,@dnptrs)=$put->X25(\$buffer,$offset,\@dnptrs,
+	$name,$type,$class,$ttl,$rdlength,$textdata);
+
+Append a X25 record to $buffer.
 
   where @common = (
 	$name,$type,$class,$ttl);
 
-The method will insert the $rdlength and $ptrdname, then
+The method will insert the $rdlength and $textdata, then
 pass through the updated pointer to the array of compressed names            
 
 The class loader, B<Net::DNS::ToolKit::RR>, inserts the @common elements and
@@ -152,27 +168,62 @@ calculate the $rdlength.
                 offset (normally end of buffer), 
                 pointer to compressed name array,
                 @common RR elements,
-		PTR Domain Name
+		PSDN string
   output:       offset to next RR,
                 new compressed name pointer array,
            or   empty list () on error.
 
-=item * (@COMMON,$PTRDNAME) = $parse->PTR(@common,$ptrdname);
+  Note:	Double quotes embedded in the text
+	should be escaped. i.e. \"
+
+=cut
+
+sub put {
+  return () unless @_;		# always return on error
+  my($self,$bp,$off,$dnp,@textdata) = @_;
+  my $rdlp = $off;		# save pointer to rdlength
+  my $doff;
+  return () unless		# check for valid offset and get
+	($off = $doff = put16($bp,$off,0));	# offset to text string
+  foreach(0..$#textdata) {
+    $textdata[$_] =~ s/\\"/"/g;	# unescape embedded quotes
+    my $len = length($textdata[$_]);
+    return () if $len > 255;
+    $off = put1char($bp,$off,$len);
+    $off = putstring($bp,$off,\$textdata[$_]);
+  }
+  # rdlength = new offset - previous offset
+  put16($bp,$rdlp, $off - $doff);
+  return($off,@$dnp);
+}
+
+=item * (@COMMON,$textdata) = $parse->X25(@common,$textdata);
 
 Converts binary/numeric field data into human readable form. The common RR
 elements are supplied by the class loader, B<Net::DNS::ToolKit::RR>.
-For PTR RR's, this returns the $ptrdname terminated with '.'
+For X25 RR's, this returns the PSDN string each surrounded by double quotes.
 
-  input:	PTR Domain Name
-  returns:	PTR Domain Name.
+  input:	text string(s)
+  returns:	"PSDN string"
 
 =back
+
+=cut
+
+sub parse {
+  shift;	# $self
+  my @ret;
+  foreach(@_) {
+    $_ =~ s/"/\\"/g;	# escape embedded quotes
+    push @ret, '"'.$_.'"';
+  }
+  return wantarray ? @ret : $ret[0];
+}
 
 =head1 DEPENDENCIES
 
 	Net::DNS::ToolKit
 	Net::DNS::Codes
-	Net::DNS::ToolKit::RR::NS
 
 =head1 EXPORT
 

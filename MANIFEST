@@ -1,4 +1,5 @@
 Artistic
+COPYRIGHT
 Changes
 GPL
 INSTALL
@@ -19,6 +20,7 @@ extra_docs/rfc1035.txt
 extra_docs/rfc1884.txt
 extra_docs/rfc1886.txt
 extra_docs/rfc3596.txt
+extra_docs/rfc3597.txt
 scripts/dig.pl
 scripts/rdns_blk.pl
 xs_include/dn_expand.inc
@@ -26,6 +28,13 @@ lib/Net/DNS/ToolKit/Debug.pm
 lib/Net/DNS/ToolKit/Question.pm
 lib/Net/DNS/ToolKit/Utilities.pm
 lib/Net/DNS/ToolKit/RR.pm
+lib/Net/DNS/ToolKit/RR/AFSDB.pm
+lib/Net/DNS/ToolKit/RR/ISDN.pm
+lib/Net/DNS/ToolKit/RR/MD.pm
+lib/Net/DNS/ToolKit/RR/MF.pm
+lib/Net/DNS/ToolKit/RR/RT.pm
+lib/Net/DNS/ToolKit/RR/TYPE.pm
+lib/Net/DNS/ToolKit/RR/X25.pm
 lib/Net/DNS/ToolKit/RR/A.pm
 lib/Net/DNS/ToolKit/RR/AAAA.pm
 lib/Net/DNS/ToolKit/RR/CNAME.pm
@@ -88,6 +97,12 @@ t/ss_id.t
 t/string.t
 t/string_off.t
 t/ttlAlpha2Num.t
+t/TYPE1.t
+t/TYPE65338.t
+t/TYPE65339.t
+t/TYPE65340.t
+t/TYPE65341.t
+t/TYPE65377.t
 Template/Changes
 Template/GPL
 Template/HOWTO.RR_extensions
@@ -96,3 +111,5 @@ Template/Makefile.PL
 Template/Template.pm
 Template/t/Template.t
 META.yml                                 Module meta-data (added by MakeMaker)
+
+

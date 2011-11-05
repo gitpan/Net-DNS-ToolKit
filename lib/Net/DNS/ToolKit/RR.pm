@@ -18,7 +18,7 @@ use Net::DNS::ToolKit qw(
 use vars qw($VERSION $autoload *sub);
 require Net::DNS::ToolKit::Question;
 
-$VERSION = do { my @r = (q$Revision: 0.06 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.07 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 sub remoteload {
 #    *sub = $autoload;
@@ -52,10 +52,26 @@ sub instantiate {
 	my $save = $@;
 	eval { local $SIG{__DIE__}; require $filename };
 	if ($@) {
-	    die __PACKAGE__.'::RR'.$func.' not implemented'
-		if $func eq 'put';
-	    $@ = $save;
-	    $RRtype = 'NotImplemented';
+#	    die __PACKAGE__.'::RR'.$func.' not implemented'
+#		if $func eq 'put';
+#	    $@ = $save;
+#	    $RRtype = 'NotImplemented';
+	  my $generic;
+	  if (	$RRtype =~ /^TYPE(\d+)$/ &&
+		($generic = TypeTxt->{$1}) &&
+		$generic =~ /T_(.+)/) {
+		$generic = __PACKAGE__.'::'. $1;
+	  } else {
+	    $generic = __PACKAGE__.'::TYPE';
+	  }
+	  local $_ = $generic .'.pm';
+	  s#::#/#g;
+	  require $_;
+	  my $code = 'package '. __PACKAGE__ .'::'. $RRtype .';
+*get = \&'. $generic .'::get;
+*put = \&'. $generic .'::put;
+*parse = \&'. $generic .'::parse;';
+	  eval "$code";
 	}
     }
     # package from local scope
@@ -75,7 +91,13 @@ sub make_function {
       return (instantiate($1,$action))[0];
     }
   } else {
-  return __PACKAGE__.'::NotImplemented::'.$action;
+#  return __PACKAGE__.'::NotImplemented::'.$action;
+    my $function = __PACKAGE__.'::TYPE'. $type;
+    if ($function->can($action)) {	# if function is instantiated
+      return $function .= '::'.$action;
+    } else {				# instantiate it or NotImplemented
+      return (instantiate("TYPE$type",$action))[0];
+    }
   }
 }  
 
@@ -140,38 +162,43 @@ sub RRparse {
   # input was: $function,$self,$name,$type,$class,$ttl,$rdlength,@rdata
   my $function = shift;
   # input is now: $name,$type,$class,$ttl,$rdlength,@rdata
-  my ($name,$type,$class,$ttl,$rdlength) = splice(@_,1,5);	# pass @_ to $function call
+  my ($name,$type,$class,$ttl,$rdlength) = splice(@_,1,5);	# pass $self,@rdata to $function call
+# if length is ever needed, add it here
+#  $_[0]->{len} = $rdlength;
   $name .= '.';	# terminate domain name
   $function = make_function($type) unless $function;
   no strict;
-  return($name,TypeTxt->{$type},ClassTxt->{$class},$ttl,$rdlength,&{$function}(@_));
+  my $typetxt = TypeTxt->{$type} || "TYPE$type";
+  my $classtxt = ClassTxt->{$class} || "CLASS$class";
+  return($name,$typetxt,$classtxt,$ttl,$rdlength,&{$function}(@_));
 }
 
 #####################################################################
 ######################### sub PACKAGES ##############################
 #####################################################################
 
-{
-  package Net::DNS::ToolKit::RR::NotImplemented;
-
-  sub get {
-    my($self,$bp,$offset) = @_;
-    (my $rdlength, $offset) = &Net::DNS::ToolKit::get16($bp,$offset);
-    $offset += $rdlength;
-    return($offset,"\0");
-  }
-
-# die in loader, unimplemented
-#  sub put {
-#    my($bp,$off,$dp) = @_;
-#    return($off,@$dp);
+# this entire sub package is obsolete as of v0.07
+#{
+#  package Net::DNS::ToolKit::RR::NotImplemented;
+#
+#  sub get {
+#    my($self,$bp,$offset) = @_;
+#    (my $rdlength, $offset) = &Net::DNS::ToolKit::get16($bp,$offset);
+#    $offset += $rdlength;
+#    return($offset,"\0");
 #  }
-  
-  sub parse {
-    shift;	# $self
-    return(@_);	# garbage in, garbage out
-  }
-}
+#
+## die in loader, unimplemented
+##  sub put {
+##    my($bp,$off,$dp) = @_;
+##    return($off,@$dp);
+##  }
+#  
+#  sub parse {
+#    shift;	# $self
+#    return(@_);	# garbage in, garbage out
+#  }
+#}
 
 {
     package Net::DNS::ToolKit::RR::get;
@@ -217,7 +244,15 @@ sub RRparse {
 	$Net::DNS::ToolKit::RR::autoload = $AUTOLOAD;
 	goto &Net::DNS::ToolKit::RR::remoteload;
     }
+# this next sub has been in the distro a long time
+# $parse->RR
+# this was unintentional but does not hurt anything
     sub RR {
+      unshift @_,undef; # flag to RRparse; 
+      goto &Net::DNS::ToolKit::RR::RRparse;
+    }
+# this SHOULD of been here instead of the above
+    sub next {
       unshift @_,undef; # flag to RRparse; 
       goto &Net::DNS::ToolKit::RR::RRparse;
     }
@@ -551,21 +586,38 @@ Michael Robinton <michael@bizsystems.com>
 
 =head1 COPYRIGHT
 
-    Copyright 2003, Michael Robinton <michael@bizsystems.com>
+    Copyright 2003 - 2011, Michael Robinton <michael@bizsystems.com>
    
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-   
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-   
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  a) the GNU General Public License as published by the Free
+  Software Foundation; either version 2, or (at your option) any
+  later version, or
+
+  b) the "Artistic License" which comes with this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either    
+the GNU General Public License or the Artistic License for more details.
+
+You should have received a copy of the Artistic License with this
+distribution, in the file named "Artistic".  If not, I'll be glad to provide
+one.
+
+You should also have received a copy of the GNU General Public License
+along with this program in the file named "Copying". If not, write to the
+
+        Free Software Foundation, Inc.                        
+        59 Temple Place, Suite 330
+        Boston, MA  02111-1307, USA                                     
+
+or visit their web page on the internet at:                      
+
+        http://www.gnu.org/copyleft/gpl.html.
 
 =head1 See also:
 

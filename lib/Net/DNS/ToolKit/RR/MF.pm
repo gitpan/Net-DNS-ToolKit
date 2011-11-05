@@ -1,11 +1,11 @@
-package Net::DNS::ToolKit::RR::PTR;
+package Net::DNS::ToolKit::RR::MF;
 
 use strict;
 #use warnings;
 
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 require Net::DNS::ToolKit::RR::NS;       
 
@@ -15,14 +15,14 @@ require Net::DNS::ToolKit::RR::NS;
 
 =head1 NAME
 
-Net::DNS::ToolKit::RR::PTR - Resource Record Handler
+Net::DNS::ToolKit::RR::MF - Resource Record Handler
 
 =head1 SYNOPSIS
 
-  DO NOT use Net::DNS::ToolKit::RR::PTR
-  DO NOT require Net::DNS::ToolKit::RR::PTR
+  DO NOT use Net::DNS::ToolKit::RR::MF
+  DO NOT require Net::DNS::ToolKit::RR::MF
 
-  Net::DNS::ToolKit::RR::PTR is autoloaded by 
+  Net::DNS::ToolKit::RR::MF is autoloaded by 
   class Net::DNS::ToolKit::RR and its methods
   are instantiated in a 'special' manner.
 
@@ -30,22 +30,22 @@ Net::DNS::ToolKit::RR::PTR - Resource Record Handler
   ($get,$put,$parse) = new Net::DNS::ToolKit::RR;
 
   ($newoff,$name,$type,$class,$ttl,$rdlength,
-        $ptrdname) = $get->PTR(\$buffer,$offset);
+        $madname) = $get->MF(\$buffer,$offset);
 
-  Note: the $get->PTR method is normally called
+  Note: the $get->MF method is normally called
   via:  @stuff = $get->next(\$buffer,$offset);
 
-  ($newoff,@dnptrs)=$put->PTR(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$ptrdname);
+  ($newoff,@dnptrs)=$put->MF(\$buffer,$offset,\@dnptrs,
+	$name,$type,$class,$ttl,$madname);
 
-  $name,$TYPE,$CLASS,$TTL,$rdlength,$IPaddr) 
+  $NAME,$TYPE,$CLASS,$TTL,$rdlength,$MADNAME) 
     = $parse->XYZ($name,$type,$class,$ttl,$rdlength,
-        $ptrdname);
+        $madname);
 
 =head1 DESCRIPTION
 
-B<Net::DNS::ToolKit::RR:PTR> appends an PTR resource record to a DNS packet under
-construction, recovers an PTR resource record from a packet being decoded, and 
+B<Net::DNS::ToolKit::RR:MF> appends an MF resource record to a DNS packet under
+construction, recovers an MF resource record from a packet being decoded, and 
 converts the numeric/binary portions of the resource record to human
 readable form.
 
@@ -94,26 +94,30 @@ readable form.
 	resource.  The format of this information varies
 	according to the TYPE and CLASS of the resource record.
 
-    3.3.12. PTR RDATA format
+    3.3.5. MF RDATA format (OBSOLETE)
 
     +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-    /                   PTRDNAME                    /
+    /                   MADNAME                     /
+    /                                               /
     +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
 
     where:
 
-    PTRDNAME A <domain-name> which points to some location 
-	in the domain name space.
+    MADNAME  A <domain-name> which specifies a host which has a 
+	mail agent for the domain which will accept mail for
+	forwarding to the domain.
 
-PTR records cause no additional section processing.  These RRs are used
-in special domains to point to some other location in the domain space.
-These records are simple data, and don't imply any special processing
-similar to that performed by CNAME, which identifies aliases.  See the
-description of the IN-ADDR.ARPA domain for an example.
+	MF records cause additional section processing which looks 
+	up an A type record corresponding to MADNAME.
+
+	MF is obsolete.  See the definition of MX and [RFC-974] 
+	for details of the new scheme.  The recommended policy for 
+	dealing with MD RRs found in a master file is to reject 
+	them, or to convert them to MX RRs with a preference of 10.
 
 =over 4
 
-=item * @stuff = $get->PTR(\$buffer,$offset);
+=item * @stuff = $get->MF(\$buffer,$offset);
 
   Get the contents of the resource record.
 
@@ -121,27 +125,27 @@ description of the IN-ADDR.ARPA domain for an example.
 
   where: @stuff = (
   $newoff $name,$type,$class,$ttl,$rdlength,
-  $ptrdname );
+  $madname );
 
-All except the last item, B<$ptrdname>, is provided by
+All except the last item, B<$madname>, is provided by
 the class loader, B<Net::DNS::ToolKit::RR>. The code in this method knows
-how to retrieve B<$ptrdname>.
+how to retrieve B<$madname>.
 
   input:        pointer to buffer,
                 offset into buffer
   returns:      offset to next resource,
                 @common RR elements,
-		PTR Domain Name
+		MF Domain Name
 
-=item * ($newoff,@dnptrs)=$put->PTR(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$ptrdname);
+=item * ($newoff,@dnptrs)=$put->MF(\$buffer,$offset,\@dnptrs,
+	$name,$type,$class,$ttl,$madname);
 
-Append an PTR record to $buffer.
+Append an MF record to $buffer.
 
   where @common = (
 	$name,$type,$class,$ttl);
 
-The method will insert the $rdlength and $ptrdname, then
+The method will insert the $rdlength and $madname, then
 pass through the updated pointer to the array of compressed names            
 
 The class loader, B<Net::DNS::ToolKit::RR>, inserts the @common elements and
@@ -152,19 +156,19 @@ calculate the $rdlength.
                 offset (normally end of buffer), 
                 pointer to compressed name array,
                 @common RR elements,
-		PTR Domain Name
+		MF Domain Name
   output:       offset to next RR,
                 new compressed name pointer array,
            or   empty list () on error.
 
-=item * (@COMMON,$PTRDNAME) = $parse->PTR(@common,$ptrdname);
+=item * (@COMMON,$MADNAME) = $parse->MF(@common,$madname);
 
 Converts binary/numeric field data into human readable form. The common RR
 elements are supplied by the class loader, B<Net::DNS::ToolKit::RR>.
-For PTR RR's, this returns the $ptrdname terminated with '.'
+For MF RR's, this returns the $madname terminated with '.'
 
-  input:	PTR Domain Name
-  returns:	PTR Domain Name.
+  input:	MF Domain Name
+  returns:	MF Domain Name.
 
 =back
 

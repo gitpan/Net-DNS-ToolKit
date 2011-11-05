@@ -183,21 +183,40 @@ Michael Robinton <michael@bizsystems.com>
 
 =head1 COPYRIGHT
 
-Copyright 2003, Michael Robinton <michael@bizsystems.com>
+    Copyright 2003 - 2011, Michael Robinton <michael@bizsystems.com>
+   
+Michael Robinton <michael@bizsystems.com>
+
+All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-   
+it under the terms of either:
+
+  a) the GNU General Public License as published by the Free
+  Software Foundation; either version 2, or (at your option) any
+  later version, or
+
+  b) the "Artistic License" which comes with this distribution.
+
 This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-   
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either    
+the GNU General Public License or the Artistic License for more details.
+
+You should have received a copy of the Artistic License with this
+distribution, in the file named "Artistic".  If not, I'll be glad to provide
+one.
+
+You should also have received a copy of the GNU General Public License
+along with this program in the file named "Copying". If not, write to the
+
+        Free Software Foundation, Inc.                        
+        59 Temple Place, Suite 330
+        Boston, MA  02111-1307, USA                                     
+
+or visit their web page on the internet at:                      
+
+        http://www.gnu.org/copyleft/gpl.html.
 
 =head1 See also:
 

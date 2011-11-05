@@ -5,7 +5,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..20\n"; }
+BEGIN { $| = 1; print "1..25\n"; }
 END {print "not ok 1\n" unless $loaded;}
 
 use Net::DNS::Codes qw(:all );
@@ -42,6 +42,8 @@ sub ok {
 ##################################################
 #	first 10 test are from Question.t
 #	and are just setup + a little checking
+#
+# see test 11, 13, 20 for testing "unknown as T_A"
 ##################################################
 
 ## test 2	generate a header for a question
@@ -160,6 +162,8 @@ print "bad name, $name, exp: $newname.\nnot "
 	unless $newname.'.' eq $name;
 &ok;
 
+$name = $newname;
+
 ## test 9	check type
 print "bad type: $type, exp: ",TypeTxt->{$newtype},"\nnot "
 	unless $type eq TypeTxt->{$newtype};
@@ -218,9 +222,9 @@ $exptext = q(
   42    :  1100_0000  0xC0  192    
   43    :  0001_0000  0x10   16    
   44    :  0000_0000  0x00    0    
-  45    :  0000_0001  0x01    0    
+  45    :  0000_0001  0x01    1    
   46    :  0000_0000  0x00    0    
-  47    :  0000_0001  0x01    1    
+  47    :  0000_0011  0x03    3    
   48    :  0000_0000  0x00    0    
   49    :  0000_0001  0x01    1    
   50    :  0101_0001  0x51   81  Q  
@@ -237,10 +241,8 @@ my $IPaddr = '10.1.2.3';
 my $netaddr = inet_aton($IPaddr);
 $off = $newoff;
 my $ttl = 86400;
-$type = 0;	# non-existent type, tests false anyway
-# NO, as of RR.pm v0.07, should process as TYPE0
-
-$class = C_IN;
+$type = T_A;
+$class = C_CHAOS;
 ($newoff,@dnptrs) = $put->A(\$buffer,$off,\@dnptrs,$name,$type,$class,$ttl,$netaddr);
 my $putoff = put_ancount(\$buffer,$newoff);
 #print_buf(\$buffer);
@@ -254,8 +256,9 @@ print "bad offset, $newoff, exp: 58\nnot "
 
 ## test 13	get, check offset
 $newoff = 0;
-($newoff,$newname,$newtype,$newclass, my $newttl, my $rdlength, my $rdata) = $get->next(\$buffer,$off);
-#print "$newoff, $newname, $newtype, $newclass, $newttl, $rdlength, $rdata\n";
+($newoff,$newname,$newtype,$newclass, my $newttl, my $rdlength, my $newnetaddr) = $get->TYPE1(\$buffer,$off);
+my $newIPaddr = inet_ntoa($newnetaddr);
+#print "$newoff, $newname, $newtype, $newclass, $newttl, $rdlength, $newIPaddr\n";
 print "bad offset, $newoff, exp: 58\nnot "
 	unless $newoff == 58;
 &ok;
@@ -285,22 +288,42 @@ print "bad rdlength, $rdlength, exp: 4\nnot "
 	unless $rdlength == 4;
 &ok;
 
-### test 19	check for null
-#print "got: $rdata, exp: (null)\nnot "
-#	unless $rdata eq "\0";
-
-# as of RR.pm v0.07, should process as A record to this point
-my $got = inet_ntoa($rdata);
-print "got: $got, exp: $IPaddr\nnot "
-	unless $got eq $IPaddr;
+## test 19	check IPaddr
+print "bad IPaddr, $newIPaddr, exp: $IPaddr\nnot "
+	unless $newIPaddr eq $IPaddr;
 &ok;
 
-# add a test for v0.07
-### test 20	check returned text representation
-my $exp = '\# 4 0a010203';
-($newname,$newtype,$newclass, $newttl, $rdlength, $rdata) =
-	$parse->TYPE0($newname,$newtype,$newclass, $newttl, $rdlength, $rdata);
+## test 20	check parse, name first
+$newIPaddr = '';
+($name,$type,$class,$ttl,$rdlength,$newIPaddr) =
+  $parse->TYPE1($newname,$newtype,$newclass,$newttl,$rdlength,$newnetaddr);
+print "name does not match\ngot: $name\nexp: $newname.\nnot "
+	unless $name eq $newname.'.';
+&ok;
 
-print "got: $rdata\nexp: $exp\nnot "
-	unless $rdata eq $exp;
+$newname = $name;
+
+## test 21	check type
+print "bad type: $type, exp: ",TypeTxt->{$newtype},"\nnot "
+	unless $type eq TypeTxt->{$newtype};
+&ok;
+
+## test 22	check class
+print "bad class: $class, exp: ",ClassTxt->{$newclass},"\nnot "
+	unless $class eq ClassTxt->{$newclass};
+&ok;
+
+## test 23	check ttl, pass thru
+print "ttl does not match, got: $ttl, exp: $newttl\nnot "
+	unless $ttl == $newttl;
+&ok;
+
+## test 24	rdlength, pass thru
+print "bad rdlength, $rdlength, exp: 4\nnot "
+	unless $rdlength == 4;
+&ok;
+
+## test 25	check ipaddr conversion
+print "bad IPaddr, got: $newIPaddr, exp: $IPaddr\nnot "
+	unless $newIPaddr eq $IPaddr;
 &ok;

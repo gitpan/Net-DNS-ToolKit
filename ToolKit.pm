@@ -14,7 +14,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.43 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.44 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -205,7 +205,23 @@ used for diagnostic purposes or as building blocks for DNS applications such
 as DNS servers and clients or to allow user applications to interact
 directly with remote DNS servers.
 
-See: Net::DNS::ToolKit for individual Resource Record methods.
+  See: Net::DNS::ToolKit:RR and the subdirectory
+	lib/Net/DNS/ToolKit/RR/
+  for individual Resource Record methods.
+
+  Net::DNS::ToolKit does not handle every type of RR with context
+  help for the record format. HOWEVER, it does handle all unknown
+  record types per RFC-3597 so if your program can manipulate the
+  binary and/or hex representation of the data as proscribed in RFC-3597 this
+  module will always work for you.
+
+A good example of full utilization of this module is
+L<Net::DNS::Dig>/module.
+
+See: L<Net::DNS::ToolKit::RR> (included in this distribution) for a complete description of how to use this
+module and the accompanying Resource Records tools.
+
+=head1 FUNCTIONS
 
 These functions return a value and offset in list context and first value only in
 scalar context.
@@ -1075,21 +1091,40 @@ dn_expand is from Michael Fuhr's Net::DNS package (DNS.pm), copyright (c)
 
 =head1 COPYRIGHT
 
-    Copyright 2003 - 2008, Michael Robinton <michael@bizsystems.com>
+    Copyright 2003 - 2011, Michael Robinton <michael@bizsystems.com>
    
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-   
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-   
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+Michael Robinton <michael@bizsystems.com>
+
+All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  a) the GNU General Public License as published by the Free
+  Software Foundation; either version 2, or (at your option) any
+  later version, or
+
+  b) the "Artistic License" which comes with this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either
+the GNU General Public License or the Artistic License for more details.
+
+You should have received a copy of the Artistic License with this
+distribution, in the file named "Artistic".  If not, I'll be glad to provide
+one.
+
+You should also have received a copy of the GNU General Public License
+along with this program in the file named "Copying". If not, write to the 
+
+        Free Software Foundation, Inc.
+        59 Temple Place, Suite 330
+        Boston, MA  02111-1307, USA
+
+or visit their web page on the internet at:
+
+        http://www.gnu.org/copyleft/gpl.html.
 
 =head1 See also:
 
