@@ -4,7 +4,7 @@ use Cwd;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 
-if ($Config{osname} =~ /win/i) {
+if ($Config{osname} =~ /Win/) {
     warn "Windows not supported, porters welcome!\n";
     exit 0;
 }

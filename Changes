@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.45  Nov 17 11:52:05 PST 2011
+	update buggy test for Windows OS in Makefile.pl, bug #72478
+	Thanks to Chrisv for spotting that.
+
 0.44  Sat Nov  5 14:02:42 PDT 2011
 	add support for 'unknown RR's' per RFC 3597
 	add support for 
