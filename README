@@ -492,16 +492,7 @@ FUNCTIONS
 
           ($newoff,@dnptrs)=dn_comp(\$name,\$buffer,$offset);
 
-                   2)   compression can be suppressed
-                        for test purposes if the pointer
-                        to $name is stored in a glob
-                        reference rather than a scalar.
-
-                  i.e.  $name = 'hostname.com';
-                        local *glob = \$name;
-
-          ($newoff,@dnptrs)=dn_comp(\$buffer,$offset,\*glob);
-                        [use a pointer to *glob]
+                   2) if \@dnptrs is null, no compression takes place
 
     * $dotquad = inet_ntoa($netaddr);
         Convert a packed IPv4 network address to a dot-quad IP address.

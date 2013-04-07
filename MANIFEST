@@ -19,6 +19,7 @@ extra_docs/rfc1034.txt
 extra_docs/rfc1035.txt
 extra_docs/rfc1884.txt
 extra_docs/rfc1886.txt
+extra_docs/rfc2782.txt
 extra_docs/rfc3596.txt
 extra_docs/rfc3597.txt
 scripts/dig.pl
@@ -49,6 +50,7 @@ lib/Net/DNS/ToolKit/RR/NULL.pm
 lib/Net/DNS/ToolKit/RR/PTR.pm
 lib/Net/DNS/ToolKit/RR/RP.pm
 lib/Net/DNS/ToolKit/RR/SOA.pm
+lib/Net/DNS/ToolKit/RR/SRV.pm
 lib/Net/DNS/ToolKit/RR/TXT.pm
 t/A.t
 t/AAAA.t
@@ -68,6 +70,7 @@ t/RP.t
 t/Question.t
 t/RRfunc.t
 t/SOA.t
+t/SRV.t
 t/TXT.t
 t/alt_methods.t
 t/collapse.t

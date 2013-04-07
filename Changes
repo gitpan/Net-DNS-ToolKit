@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.46  Sun Apr  7 14:16:12 PDT 2013
+	add support for SRV
+
 0.45  Nov 17 11:52:05 PST 2011
 	update buggy test for Windows OS in Makefile.pl, bug #72478
 	Thanks to Chrisv for spotting that.

@@ -14,7 +14,7 @@ use AutoLoader qw(AUTOLOAD);
 
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = do { my @r = (q$Revision: 0.45 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.46 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
 	get1char
@@ -732,16 +732,22 @@ Compress a domain name and append it to the buffer.
 
   ($newoff,@dnptrs)=dn_comp(\$name,\$buffer,$offset);
 
-	   2)	compression can be suppressed
-		for test purposes if the pointer
-		to $name is stored in a glob
-		reference rather than a scalar.
+	   2) if \@dnptrs is null, no compression takes place
 
-	  i.e.	$name = 'hostname.com';
-		local *glob = \$name;
+=cut
 
-  ($newoff,@dnptrs)=dn_comp(\$buffer,$offset,\*glob);
-		[use a pointer to *glob]
+# deprecated, does not see to work
+#	   2)	compression can be suppressed
+#		for test purposes if the pointer
+#		to $name is stored in a glob
+#		reference rather than a scalar.
+#
+#	  i.e.	$name = 'hostname.com';
+#		local *glob = \$name;
+#
+#  ($newoff,@dnptrs)=dn_comp(\$buffer,$offset,\*glob);
+#		[use a pointer to *glob]
+#
 
 =item * $dotquad = inet_ntoa($netaddr); 
 
