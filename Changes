@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.47  Tue Apr 16 11:59:02 PDT 2013
+	add #ifdef BIND_4_COMPAT
+	around #include nameser_compat.h
+	so that later versions of OpenBSD work properly
+
 0.46  Sun Apr  7 14:16:12 PDT 2013
 	add support for SRV
 

@@ -50,7 +50,9 @@
 #include <netdb.h>
 #include <resolv.h>
 #include <arpa/nameser.h>
+#ifdef  BIND_4_COMPAT
 #include <arpa/nameser_compat.h>
+#endif
 #include "ToolKit.h"
 
 /* for clock	*/
