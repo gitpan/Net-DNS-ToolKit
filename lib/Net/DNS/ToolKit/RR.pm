@@ -18,12 +18,13 @@ use Net::DNS::ToolKit qw(
 use vars qw($VERSION $autoload *sub);
 require Net::DNS::ToolKit::Question;
 
-$VERSION = do { my @r = (q$Revision: 0.07 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.09 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 sub remoteload {
 #    *sub = $autoload;
     (my $RRtype = $autoload ) =~ s/.*::(\w+):://;
     # function = $1, one of get,put,parse
+    local $_;
     ($autoload,$_) = instantiate($RRtype,$1);
 #    my $code = 'package '. __PACKAGE__ .'::'. $1 .'; '.'*'. $RRtype .'=\&'. $autoload;
     my $code = 'package '. __PACKAGE__ .'::'. $1 .'; '.'*'. $RRtype .
@@ -83,6 +84,7 @@ sub make_function {
   my $type = shift;
   (caller(1))[3] =~ /RR(\w+)$/;
   my $action = $1;
+  local $_;
   if (($_ = TypeTxt->{$type}) && $_ =~ /T_(.+)/) {	# type is real?
     my $function = __PACKAGE__.'::'.$1;
     if ($function->can($action)) {	# if function is instantiated
@@ -139,6 +141,8 @@ sub RRput {
     ($func,$put,$bp,$off,$dnp,$name,$type,$class,$ttl) = splice(@_,0,9);
   }
   # input is now: @rdata
+  die "'names' ending in '.' are not allowed per RFC's\n"
+	if $name =~ /\.$/;
   ($off, my @dnptrs) = dn_comp($bp,$off,\$name,$dnp);
   unless (@dnptrs) {		# if not valid return
     while(shift) {};		# empty the input array

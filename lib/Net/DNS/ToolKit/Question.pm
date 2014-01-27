@@ -83,6 +83,7 @@ Usage: ($newoff,@dnptrs)=$put->Question(\$buffer,$offset,
   returns:	offset to next record,
 		updated array of offsets to
 		  previous compressed names
+
 =cut
 
 sub put {

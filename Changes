@@ -1,5 +1,16 @@
 Revision history for Perl extension Net::DNS::ToolKit
 
+0.48  Mon Jan 27 11:59:58 PST 2014
+        modify Makefile.PL to bypass missing 'pod2text'
+
+	correct typo's in documentation for NULL and TXT
+	Net::DNS::ToolKit::RR data records
+
+	add test for "names" ending '.'
+	die with message, not allowed per RFC's
+
+	localize $_ in RR.pm v0.09
+
 0.47  Tue Apr 16 11:59:02 PDT 2013
 	add #ifdef BIND_4_COMPAT
 	around #include nameser_compat.h

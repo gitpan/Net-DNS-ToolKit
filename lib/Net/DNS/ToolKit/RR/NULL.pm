@@ -14,7 +14,7 @@ use Net::DNS::ToolKit qw(
 use Net::DNS::Codes qw(:constants);
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 =head1 NAME
 
@@ -39,11 +39,10 @@ Net::DNS::ToolKit::RR::NULL - Resource Record Handler
   via:  @stuff = $get->next(\$buffer,$offset);
 
   ($newoff,@dnptrs)=$put->NULL(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$anydata);
+	$name,$type,$class,$ttl,$anydata);
 
   $NAME,$TYPE,$CLASS,$TTL,$rdlength,$anydata) 
-    = $parse->NULL($name,$type,$class,$ttl,$rdlength,
-        $anydata);
+    = $parse->NULL($name,$type,$class,$ttl,$anydata);
 
 =head1 DESCRIPTION
 
@@ -125,8 +124,7 @@ experimental extensions of the DNS.
   USE: @stuff = $get->next(\$buffer,$offset);
 
   where: @stuff = (
-  $newoff $name,$type,$class,$ttl,$rdlength,
-  $anydata );
+  $newoff $name,$type,$class,$ttl,$anydata );
 
 All except the last item, B<$anydata>, is provided by
 the class loader, B<Net::DNS::ToolKit::RR>. The code in this method knows
@@ -148,7 +146,7 @@ sub get {
 }
  
 =item * ($newoff,@dnptrs)=$put->NULL(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$anydata);
+	$name,$type,$class,$ttl,$anydata);
 
 Append a NULL record to $buffer.
 

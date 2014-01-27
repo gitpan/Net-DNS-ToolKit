@@ -17,7 +17,7 @@ use Net::DNS::ToolKit qw(
 use Net::DNS::Codes qw(:constants);
 use vars qw($VERSION);
 
-$VERSION = do { my @r = (q$Revision: 0.02 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.03 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 =head1 NAME
 
@@ -42,7 +42,7 @@ Net::DNS::ToolKit::RR::TXT - Resource Record Handler
   via:  @stuff = $get->next(\$buffer,$offset);
 
   ($newoff,@dnptrs)=$put->TXT(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$textdata);
+	$name,$type,$class,$ttl,$textdata,$textdata,$textdata,...);
 
   $NAME,$TYPE,$CLASS,$TTL,$rdlength,$textdata) 
     = $parse->TXT($name,$type,$class,$ttl,$rdlength,
@@ -124,8 +124,7 @@ Note: Each character string consists of up to 255 characters.
   USE: @stuff = $get->next(\$buffer,$offset);
 
   where: @stuff = (
-  $newoff $name,$type,$class,$ttl,$rdlength,
-  $textdata );
+  $newoff $name,$type,$class,$ttl,@textdata );
 
 All except the last item, B<$textdata>, is provided by
 the class loader, B<Net::DNS::ToolKit::RR>. The code in this method knows
@@ -153,7 +152,7 @@ sub get {
 }
 
 =item * ($newoff,@dnptrs)=$put->TXT(\$buffer,$offset,\@dnptrs,
-	$name,$type,$class,$ttl,$rdlength,$textdata);
+	$name,$type,$class,$ttl,@textdata);
 
 Append a TXT record to $buffer.
 
@@ -200,7 +199,7 @@ sub put {
   return($off,@$dnp);
 }
 
-=item * (@COMMON,$textdata) = $parse->TXT(@common,$textdata);
+=item * (@COMMON,@textdata) = $parse->TXT(@common,@textdata);
 
 Converts binary/numeric field data into human readable form. The common RR
 elements are supplied by the class loader, B<Net::DNS::ToolKit::RR>.

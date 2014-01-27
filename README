@@ -490,7 +490,7 @@ FUNCTIONS
 
                   i.e.  initial call
 
-          ($newoff,@dnptrs)=dn_comp(\$name,\$buffer,$offset);
+          ($newoff,@dnptrs)=dn_comp(\$buffer,$offset,\$name);
 
                    2) if \@dnptrs is null, no compression takes place
 
@@ -695,7 +695,7 @@ ACKNOWLEDGEMENTS
     (c) 1997-2002. Thank you Michael.
 
 COPYRIGHT
-        Copyright 2003 - 2011, Michael Robinton <michael@bizsystems.com>
+        Copyright 2003 - 2014, Michael Robinton <michael@bizsystems.com>
    
     Michael Robinton <michael@bizsystems.com>
 
